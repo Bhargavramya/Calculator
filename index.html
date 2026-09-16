@@ -17,7 +17,7 @@
             <h1 class="text-xl font-bold tracking-wide">Lalitha Naturals</h1>
             <p class="text-xs text-gray-400">Store Discount Calculator</p>
         </div>
-        <button onclick="toggleSettings()" class="p-2.5 bg-zinc-800 rounded-full hover:bg-zinc-700 transition">
+        <button onclick="toggleSettings()" class="p-2.5 bg-zinc-800 rounded-full hover:bg-zinc-700 transition" aria-label="Settings">
             ⚙️
         </button>
     </header>
@@ -38,7 +38,7 @@
         <!-- Input Card -->
         <div class="bg-zinc-900 border border-white/10 rounded-3xl p-5 space-y-4 shadow-xl">
             <div>
-                <label class="block text-xs font-medium text-gray-400 mb-1">MRP AMOUNT</label>
+                <label for="mrpInput" class="block text-xs font-medium text-gray-400 mb-1">MRP AMOUNT</label>
                 <input type="number" id="mrpInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-4xl font-mono-nums font-bold text-white focus:outline-none focus:border-orange-500 text-right">
             </div>
 
@@ -46,16 +46,13 @@
             <div>
                 <label class="block text-xs font-medium text-gray-400 mb-2">SELECT DISCOUNT</label>
                 <div id="discountButtonsContainer" class="grid grid-cols-4 gap-2">
-                    <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">20%</button>
-                    <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">40%</button>
-                    <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold transition border border-transparent">None</button>
-                    <input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">
+                    <!-- Populated dynamically -->
                 </div>
             </div>
 
             <!-- Exchange Value Input -->
             <div>
-                <label class="block text-xs font-medium text-gray-400 mb-1">EXCHANGE VALUE (OPTIONAL)</label>
+                <label for="exchangeInput" class="block text-xs font-medium text-gray-400 mb-1">EXCHANGE VALUE (OPTIONAL)</label>
                 <input type="number" id="exchangeInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-2xl font-mono-nums font-semibold text-orange-400 focus:outline-none focus:border-orange-500 text-right">
             </div>
 
@@ -80,11 +77,11 @@
     <footer class="mt-4 bg-zinc-900 border border-white/10 rounded-3xl p-4 space-y-2">
         <div class="flex justify-between text-xs text-gray-400 font-mono-nums">
             <span>Items: <strong id="totalCount" class="text-white">0</strong></span>
-            <span>Total MRP: ₹<strong id="totalMrp" class="text-white">0</strong></span>
+            <span>Total MRP: ₹<strong id="totalMrp" class="text-white">0.00</strong></span>
         </div>
         <div class="flex justify-between items-end pt-1 border-t border-white/10">
             <span class="text-sm font-semibold text-gray-300">FINAL PAYABLE</span>
-            <span class="text-3xl font-bold font-mono-nums text-orange-500" id="grandTotal">₹0</span>
+            <span class="text-3xl font-bold font-mono-nums text-orange-500" id="grandTotal">₹0.00</span>
         </div>
     </footer>
 
@@ -104,9 +101,12 @@
                 b.classList.remove('bg-orange-500', 'text-black', 'border-white');
                 b.classList.add('bg-zinc-800', 'text-white');
             });
-            if(val !== null) {
+            const customInput = document.getElementById('customDiscInput');
+            if (customInput) customInput.value = '';
+            
+            if (val !== null) {
                 const activeBtn = document.getElementById(`btn-${val}`);
-                if(activeBtn) {
+                if (activeBtn) {
                     activeBtn.classList.remove('bg-zinc-800', 'text-white');
                     activeBtn.classList.add('bg-orange-500', 'text-black', 'border-white');
                 }
@@ -114,7 +114,7 @@
         }
 
         function setCustomDiscount(val) {
-            if(val) {
+            if (val && !isNaN(parseFloat(val))) {
                 selectedDiscount = parseFloat(val);
                 document.querySelectorAll('.disc-btn').forEach(b => {
                     b.classList.remove('bg-orange-500', 'text-black', 'border-white');
@@ -131,7 +131,7 @@
 
         function addCustomPercentage() {
             const val = parseFloat(document.getElementById('newPercentageInput').value);
-            if(!isNaN(val) && val > 0 && !customDiscounts.includes(val)) {
+            if (!isNaN(val) && val > 0 && !customDiscounts.includes(val)) {
                 customDiscounts.push(val);
                 document.getElementById('newPercentageInput').value = '';
                 saveState();
@@ -163,12 +163,13 @@
                 <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">20%</button>
                 <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">40%</button>
                 <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold transition border border-transparent">None</button>
-                <input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">
             `;
             
             customDiscounts.forEach(d => {
                 html += `<button onclick="setDiscount(${d})" id="btn-${d}" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-lg font-bold font-mono-nums transition border border-transparent">${d}%</button>`;
             });
+
+            html += `<input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">`;
 
             container.innerHTML = html;
             setDiscount(selectedDiscount);
@@ -178,7 +179,7 @@
             const mrp = parseFloat(document.getElementById('mrpInput').value);
             const exchange = parseFloat(document.getElementById('exchangeInput').value) || 0;
             
-            if(isNaN(mrp) || mrp <= 0) return;
+            if (isNaN(mrp) || mrp <= 0) return;
 
             const discAmount = (mrp * selectedDiscount) / 100;
             const finalPrice = Math.max(0, mrp - discAmount - exchange);
@@ -212,7 +213,7 @@
 
         function renderItems() {
             const container = document.getElementById('itemsListContainer');
-            if(items.length === 0) {
+            if (items.length === 0) {
                 container.innerHTML = `<div class="text-center py-6 text-xs text-gray-500 bg-zinc-900/50 rounded-2xl border border-white/5">No items added yet</div>`;
             } else {
                 container.innerHTML = items.map((item, idx) => `
@@ -220,12 +221,12 @@
                         <div class="space-y-0.5">
                             <div class="font-mono-nums font-bold text-base">₹${item.final.toFixed(2)}</div>
                             <div class="text-xs text-gray-400 space-x-2">
-                                <span>MRP: ₹${item.mrp}</span>
+                                <span>MRP: ₹${item.mrp.toFixed(2)}</span>
                                 <span class="bg-zinc-800 px-2 py-0.5 rounded text-orange-400 font-semibold">${item.discountPercent}% OFF</span>
                                 ${item.exchange > 0 ? `<span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded">Ex: -₹${item.exchange}</span>` : ''}
                             </div>
                         </div>
-                        <button onclick="deleteItem(${idx})" class="text-gray-500 hover:text-red-400 p-2">✕</button>
+                        <button onclick="deleteItem(${idx})" class="text-gray-500 hover:text-red-400 p-2" aria-label="Delete item">✕</button>
                     </div>
                 `).join('');
             }
@@ -238,6 +239,7 @@
             document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
         }
 
+        // Initial setup
         renderDiscountButtons();
         renderItems();
     </script>
