@@ -1,247 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lalitha Naturals - Store Discount Calculator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .font-mono-nums { font-variant-numeric: tabular-nums; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lalitha Naturals - Store Discount Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .font-mono-nums { font-variant-numeric: tabular-nums; }
+    </style>
 </head>
 <body class="bg-black text-white min-h-screen font-sans antialiased flex flex-col justify-between p-4 max-w-md mx-auto">
 
-    <!-- Header -->
-    <header class="flex justify-between items-center py-3 border-b border-white/10 mb-4">
-        <div>
-            <h1 class="text-xl font-bold tracking-wide">Lalitha Naturals</h1>
-            <p class="text-xs text-gray-400">Store Discount Calculator</p>
-        </div>
-        <button onclick="toggleSettings()" class="p-2.5 bg-zinc-800 rounded-full hover:bg-zinc-700 transition" aria-label="Settings">
-            ⚙️
-        </button>
-    </header>
+    <!-- Header -->
+    <header class="flex justify-between items-center py-3 border-b border-white/10 mb-4">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide">Lalitha Naturals</h1>
+            <p class="text-xs text-gray-400">Store Discount Calculator</p>
+        </div>
+        <button onclick="toggleSettings()" class="p-2.5 bg-zinc-800 rounded-full hover:bg-zinc-700 transition">
+            ⚙️
+        </button>
+    </header>
 
-    <!-- Main Workspace -->
-    <main class="space-y-4 flex-1">
-        
-        <!-- Settings Modal / Drawer -->
-        <div id="settingsDrawer" class="hidden bg-zinc-900 border border-white/10 rounded-2xl p-4 space-y-3">
-            <h2 class="text-sm font-semibold text-gray-300">Manage Custom Percentages</h2>
-            <div class="flex gap-2">
-                <input type="number" id="newPercentageInput" placeholder="Enter % (e.g., 15)" class="flex-1 bg-black border border-white/20 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500">
-                <button onclick="addCustomPercentage()" class="bg-orange-500 hover:bg-orange-600 text-black font-semibold px-4 py-2 rounded-xl">Add</button>
-            </div>
-            <div id="customPercentagesList" class="flex flex-wrap gap-2 pt-2"></div>
-        </div>
+    <!-- Main Workspace -->
+    <main class="space-y-4 flex-1">
+        
+        <!-- Settings Modal / Drawer -->
+        <div id="settingsDrawer" class="hidden bg-zinc-900 border border-white/10 rounded-2xl p-4 space-y-3">
+            <h2 class="text-sm font-semibold text-gray-300">Manage Custom Percentages</h2>
+            <div class="flex gap-2">
+                <input type="number" id="newPercentageInput" placeholder="Enter % (e.g., 15)" class="flex-1 bg-black border border-white/20 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500">
+                <button onclick="addCustomPercentage()" class="bg-orange-500 hover:bg-orange-600 text-black font-semibold px-4 py-2 rounded-xl">Add</button>
+            </div>
+            <div id="customPercentagesList" class="flex flex-wrap gap-2 pt-2"></div>
+        </div>
 
-        <!-- Input Card -->
-        <div class="bg-zinc-900 border border-white/10 rounded-3xl p-5 space-y-4 shadow-xl">
-            <div>
-                <label for="mrpInput" class="block text-xs font-medium text-gray-400 mb-1">MRP AMOUNT</label>
-                <input type="number" id="mrpInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-4xl font-mono-nums font-bold text-white focus:outline-none focus:border-orange-500 text-right">
-            </div>
+        <!-- Input Card -->
+        <div class="bg-zinc-900 border border-white/10 rounded-3xl p-5 space-y-4 shadow-xl">
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-1">MRP AMOUNT</label>
+                <input type="number" id="mrpInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-4xl font-mono-nums font-bold text-white focus:outline-none focus:border-orange-500 text-right">
+            </div>
 
-            <!-- Discount Selection -->
-            <div>
-                <label class="block text-xs font-medium text-gray-400 mb-2">SELECT DISCOUNT</label>
-                <div id="discountButtonsContainer" class="grid grid-cols-4 gap-2">
-                    <!-- Populated dynamically -->
-                </div>
-            </div>
+            <!-- Discount Selection -->
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-2">SELECT DISCOUNT</label>
+                <div id="discountButtonsContainer" class="grid grid-cols-4 gap-2">
+                    <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">20%</button>
+                    <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">40%</button>
+                    <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold transition border border-transparent">None</button>
+                    <input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">
+                </div>
+            </div>
 
-            <!-- Exchange Value Input -->
-            <div>
-                <label for="exchangeInput" class="block text-xs font-medium text-gray-400 mb-1">EXCHANGE VALUE (OPTIONAL)</label>
-                <input type="number" id="exchangeInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-2xl font-mono-nums font-semibold text-orange-400 focus:outline-none focus:border-orange-500 text-right">
-            </div>
+            <!-- Exchange Value Input -->
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-1">EXCHANGE VALUE (OPTIONAL)</label>
+                <input type="number" id="exchangeInput" placeholder="0" class="w-full bg-black border border-white/20 rounded-2xl px-4 py-3 text-2xl font-mono-nums font-semibold text-orange-400 focus:outline-none focus:border-orange-500 text-right">
+            </div>
 
-            <button onclick="addItem()" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 rounded-2xl text-lg transition shadow-lg active:scale-95">
-                ADD ITEM
-            </button>
-        </div>
+            <button onclick="addItem()" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 rounded-2xl text-lg transition shadow-lg active:scale-95">
+                ADD ITEM
+            </button>
+        </div>
 
-        <!-- Itemized List Section -->
-        <div class="space-y-2">
-            <div class="flex justify-between items-center text-xs text-gray-400 px-1">
-                <span>ITEM LIST</span>
-                <button onclick="clearAllItems()" class="text-red-400 hover:underline">Clear All</button>
-            </div>
-            <div id="itemsListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1">
-                <!-- Dynamically populated items -->
-            </div>
-        </div>
-    </main>
+        <!-- Itemized List Section -->
+        <div class="space-y-2">
+            <div class="flex justify-between items-center text-xs text-gray-400 px-1">
+                <span>ITEM LIST</span>
+                <button onclick="clearAllItems()" class="text-red-400 hover:underline">Clear All</button>
+            </div>
+            <div id="itemsListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                <!-- Dynamically populated items -->
+            </div>
+        </div>
+    </main>
 
-    <!-- Bottom Grand Total Summary Bar -->
-    <footer class="mt-4 bg-zinc-900 border border-white/10 rounded-3xl p-4 space-y-2">
-        <div class="flex justify-between text-xs text-gray-400 font-mono-nums">
-            <span>Items: <strong id="totalCount" class="text-white">0</strong></span>
-            <span>Total MRP: ₹<strong id="totalMrp" class="text-white">0.00</strong></span>
-        </div>
-        <div class="flex justify-between items-end pt-1 border-t border-white/10">
-            <span class="text-sm font-semibold text-gray-300">FINAL PAYABLE</span>
-            <span class="text-3xl font-bold font-mono-nums text-orange-500" id="grandTotal">₹0.00</span>
-        </div>
-    </footer>
+    <!-- Bottom Grand Total Summary Bar -->
+    <footer class="mt-4 bg-zinc-900 border border-white/10 rounded-3xl p-4 space-y-2">
+        <div class="flex justify-between text-xs text-gray-400 font-mono-nums">
+            <span>Items: <strong id="totalCount" class="text-white">0</strong></span>
+            <span>Total MRP: ₹<strong id="totalMrp" class="text-white">0</strong></span>
+        </div>
+        <div class="flex justify-between items-end pt-1 border-t border-white/10">
+            <span class="text-sm font-semibold text-gray-300">FINAL PAYABLE</span>
+            <span class="text-3xl font-bold font-mono-nums text-orange-500" id="grandTotal">₹0</span>
+        </div>
+    </footer>
 
-    <script>
-        let items = JSON.parse(localStorage.getItem('lalitha_calc_items')) || [];
-        let customDiscounts = JSON.parse(localStorage.getItem('lalitha_custom_discounts')) || [];
-        let selectedDiscount = 20;
+    <script>
+        let items = JSON.parse(localStorage.getItem('lalitha_calc_items')) || [];
+        let customDiscounts = JSON.parse(localStorage.getItem('lalitha_custom_discounts')) || [];
+        let selectedDiscount = 20;
 
-        function saveState() {
-            localStorage.setItem('lalitha_calc_items', JSON.stringify(items));
-            localStorage.setItem('lalitha_custom_discounts', JSON.stringify(customDiscounts));
-        }
+        function saveState() {
+            localStorage.setItem('lalitha_calc_items', JSON.stringify(items));
+            localStorage.setItem('lalitha_custom_discounts', JSON.stringify(customDiscounts));
+        }
 
-        function setDiscount(val) {
-            selectedDiscount = val;
-            document.querySelectorAll('.disc-btn').forEach(b => {
-                b.classList.remove('bg-orange-500', 'text-black', 'border-white');
-                b.classList.add('bg-zinc-800', 'text-white');
-            });
-            const customInput = document.getElementById('customDiscInput');
-            if (customInput) customInput.value = '';
-            
-            if (val !== null) {
-                const activeBtn = document.getElementById(`btn-${val}`);
-                if (activeBtn) {
-                    activeBtn.classList.remove('bg-zinc-800', 'text-white');
-                    activeBtn.classList.add('bg-orange-500', 'text-black', 'border-white');
-                }
-            }
-        }
+        function setDiscount(val) {
+            selectedDiscount = val;
+            document.querySelectorAll('.disc-btn').forEach(b => {
+                b.classList.remove('bg-orange-500', 'text-black', 'border-white');
+                b.classList.add('bg-zinc-800', 'text-white');
+            });
+            if(val !== null) {
+                const activeBtn = document.getElementById(`btn-${val}`);
+                if(activeBtn) {
+                    activeBtn.classList.remove('bg-zinc-800', 'text-white');
+                    activeBtn.classList.add('bg-orange-500', 'text-black', 'border-white');
+                }
+            }
+        }
 
-        function setCustomDiscount(val) {
-            if (val && !isNaN(parseFloat(val))) {
-                selectedDiscount = parseFloat(val);
-                document.querySelectorAll('.disc-btn').forEach(b => {
-                    b.classList.remove('bg-orange-500', 'text-black', 'border-white');
-                    b.classList.add('bg-zinc-800', 'text-white');
-                });
-            }
-        }
+        function setCustomDiscount(val) {
+            if(val) {
+                selectedDiscount = parseFloat(val);
+                document.querySelectorAll('.disc-btn').forEach(b => {
+                    b.classList.remove('bg-orange-500', 'text-black', 'border-white');
+                    b.classList.add('bg-zinc-800', 'text-white');
+                });
+            }
+        }
 
-        function toggleSettings() {
-            const drawer = document.getElementById('settingsDrawer');
-            drawer.classList.toggle('hidden');
-            renderCustomPercentages();
-        }
+        function toggleSettings() {
+            const drawer = document.getElementById('settingsDrawer');
+            drawer.classList.toggle('hidden');
+            renderCustomPercentages();
+        }
 
-        function addCustomPercentage() {
-            const val = parseFloat(document.getElementById('newPercentageInput').value);
-            if (!isNaN(val) && val > 0 && !customDiscounts.includes(val)) {
-                customDiscounts.push(val);
-                document.getElementById('newPercentageInput').value = '';
-                saveState();
-                renderCustomPercentages();
-                renderDiscountButtons();
-            }
-        }
+        function addCustomPercentage() {
+            const val = parseFloat(document.getElementById('newPercentageInput').value);
+            if(!isNaN(val) && val > 0 && !customDiscounts.includes(val)) {
+                customDiscounts.push(val);
+                document.getElementById('newPercentageInput').value = '';
+                saveState();
+                renderCustomPercentages();
+                renderDiscountButtons();
+            }
+        }
 
-        function removeCustomPercentage(val) {
-            customDiscounts = customDiscounts.filter(d => d !== val);
-            saveState();
-            renderCustomPercentages();
-            renderDiscountButtons();
-        }
+        function removeCustomPercentage(val) {
+            customDiscounts = customDiscounts.filter(d => d !== val);
+            saveState();
+            renderCustomPercentages();
+            renderDiscountButtons();
+        }
 
-        function renderCustomPercentages() {
-            const container = document.getElementById('customPercentagesList');
-            container.innerHTML = customDiscounts.map(d => `
-                <span class="inline-flex items-center gap-1 bg-zinc-800 text-xs px-3 py-1.5 rounded-xl border border-white/10">
-                    ${d}% 
-                    <button onclick="removeCustomPercentage(${d})" class="text-red-400 ml-1 font-bold">×</button>
-                </span>
-            `).join('') || '<span class="text-xs text-gray-500">No custom percentages saved yet.</span>';
-        }
+        function renderCustomPercentages() {
+            const container = document.getElementById('customPercentagesList');
+            container.innerHTML = customDiscounts.map(d => `
+                <span class="inline-flex items-center gap-1 bg-zinc-800 text-xs px-3 py-1.5 rounded-xl border border-white/10">
+                    ${d}% 
+                    <button onclick="removeCustomPercentage(${d})" class="text-red-400 ml-1 font-bold">×</button>
+                </span>
+            `).join('') || '<span class="text-xs text-gray-500">No custom percentages saved yet.</span>';
+        }
 
-        function renderDiscountButtons() {
-            const container = document.getElementById('discountButtonsContainer');
-            let html = `
-                <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">20%</button>
-                <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">40%</button>
-                <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold transition border border-transparent">None</button>
-            `;
-            
-            customDiscounts.forEach(d => {
-                html += `<button onclick="setDiscount(${d})" id="btn-${d}" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-lg font-bold font-mono-nums transition border border-transparent">${d}%</button>`;
-            });
+        function renderDiscountButtons() {
+            const container = document.getElementById('discountButtonsContainer');
+            let html = `
+                <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">20%</button>
+                <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-xl font-bold font-mono-nums transition border border-transparent">40%</button>
+                <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold transition border border-transparent">None</button>
+                <input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">
+            `;
+            
+            customDiscounts.forEach(d => {
+                html += `<button onclick="setDiscount(${d})" id="btn-${d}" class="disc-btn py-3 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-lg font-bold font-mono-nums transition border border-transparent">${d}%</button>`;
+            });
 
-            html += `<input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-black border border-white/20 rounded-2xl text-center text-sm font-bold text-white focus:outline-none focus:border-orange-500">`;
+            container.innerHTML = html;
+            setDiscount(selectedDiscount);
+        }
 
-            container.innerHTML = html;
-            setDiscount(selectedDiscount);
-        }
+        function addItem() {
+            const mrp = parseFloat(document.getElementById('mrpInput').value);
+            const exchange = parseFloat(document.getElementById('exchangeInput').value) || 0;
+            
+            if(isNaN(mrp) || mrp <= 0) return;
 
-        function addItem() {
-            const mrp = parseFloat(document.getElementById('mrpInput').value);
-            const exchange = parseFloat(document.getElementById('exchangeInput').value) || 0;
-            
-            if (isNaN(mrp) || mrp <= 0) return;
+            const discAmount = (mrp * selectedDiscount) / 100;
+            const finalPrice = Math.max(0, mrp - discAmount - exchange);
 
-            const discAmount = (mrp * selectedDiscount) / 100;
-            const finalPrice = Math.max(0, mrp - discAmount - exchange);
+            items.unshift({
+                mrp: mrp,
+                discountPercent: selectedDiscount,
+                exchange: exchange,
+                final: finalPrice
+            });
 
-            items.unshift({
-                mrp: mrp,
-                discountPercent: selectedDiscount,
-                exchange: exchange,
-                final: finalPrice
-            });
+            document.getElementById('mrpInput').value = '';
+            document.getElementById('exchangeInput').value = '';
+            document.getElementById('mrpInput').focus();
 
-            document.getElementById('mrpInput').value = '';
-            document.getElementById('exchangeInput').value = '';
-            document.getElementById('mrpInput').focus();
+            saveState();
+            renderItems();
+        }
 
-            saveState();
-            renderItems();
-        }
+        function deleteItem(index) {
+            items.splice(index, 1);
+            saveState();
+            renderItems();
+        }
 
-        function deleteItem(index) {
-            items.splice(index, 1);
-            saveState();
-            renderItems();
-        }
+        function clearAllItems() {
+            items = [];
+            saveState();
+            renderItems();
+        }
 
-        function clearAllItems() {
-            items = [];
-            saveState();
-            renderItems();
-        }
+        function renderItems() {
+            const container = document.getElementById('itemsListContainer');
+            if(items.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-xs text-gray-500 bg-zinc-900/50 rounded-2xl border border-white/5">No items added yet</div>`;
+            } else {
+                container.innerHTML = items.map((item, idx) => `
+                    <div class="bg-zinc-900 border border-white/10 rounded-2xl p-3 flex justify-between items-center text-sm">
+                        <div class="space-y-0.5">
+                            <div class="font-mono-nums font-bold text-base">₹${item.final.toFixed(2)}</div>
+                            <div class="text-xs text-gray-400 space-x-2">
+                                <span>MRP: ₹${item.mrp}</span>
+                                <span class="bg-zinc-800 px-2 py-0.5 rounded text-orange-400 font-semibold">${item.discountPercent}% OFF</span>
+                                ${item.exchange > 0 ? `<span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded">Ex: -₹${item.exchange}</span>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="deleteItem(${idx})" class="text-gray-500 hover:text-red-400 p-2">✕</button>
+                    </div>
+                `).join('');
+            }
 
-        function renderItems() {
-            const container = document.getElementById('itemsListContainer');
-            if (items.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-xs text-gray-500 bg-zinc-900/50 rounded-2xl border border-white/5">No items added yet</div>`;
-            } else {
-                container.innerHTML = items.map((item, idx) => `
-                    <div class="bg-zinc-900 border border-white/10 rounded-2xl p-3 flex justify-between items-center text-sm">
-                        <div class="space-y-0.5">
-                            <div class="font-mono-nums font-bold text-base">₹${item.final.toFixed(2)}</div>
-                            <div class="text-xs text-gray-400 space-x-2">
-                                <span>MRP: ₹${item.mrp.toFixed(2)}</span>
-                                <span class="bg-zinc-800 px-2 py-0.5 rounded text-orange-400 font-semibold">${item.discountPercent}% OFF</span>
-                                ${item.exchange > 0 ? `<span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded">Ex: -₹${item.exchange}</span>` : ''}
-                            </div>
-                        </div>
-                        <button onclick="deleteItem(${idx})" class="text-gray-500 hover:text-red-400 p-2" aria-label="Delete item">✕</button>
-                    </div>
-                `).join('');
-            }
+            let totalMrp = items.reduce((sum, i) => sum + i.mrp, 0);
+            let grandTotal = items.reduce((sum, i) => sum + i.final, 0);
 
-            let totalMrp = items.reduce((sum, i) => sum + i.mrp, 0);
-            let grandTotal = items.reduce((sum, i) => sum + i.final, 0);
+            document.getElementById('totalCount').innerText = items.length;
+            document.getElementById('totalMrp').innerText = totalMrp.toFixed(2);
+            document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
+        }
 
-            document.getElementById('totalCount').innerText = items.length;
-            document.getElementById('totalMrp').innerText = totalMrp.toFixed(2);
-            document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
-        }
-
-        // Initial setup
-        renderDiscountButtons();
-        renderItems();
-    </script>
+        renderDiscountButtons();
+        renderItems();
+    </script>
 </body>
-</html>
+</html>Im getting error in this code 404 file not found. Host from github
