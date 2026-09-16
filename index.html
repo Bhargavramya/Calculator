@@ -3,296 +3,575 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lalitha Naturals - Store Discount Calculator</title>
+    <title>Store Discount Calculator - Pro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font & Tabular Numbers styling -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-mono-nums { font-variant-numeric: tabular-nums; }
-        /* Custom scrollbar for items list */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            user-select: none;
+        }
+        .font-mono-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        .ios-btn:active {
+            filter: brightness(130%);
+            transform: scale(0.97);
+            transition: transform 0.05s ease;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a3c;
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto antialiased">
+<body class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-6 max-w-md mx-auto">
 
-    <!-- Header -->
-    <header class="flex justify-between items-center py-3 border-b border-zinc-800/80 mb-4">
-        <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-lg shadow-sm">
-                🌿
+    <header class="w-full flex justify-between items-center py-2 px-1 mb-2 border-b border-zinc-900">
+        <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center font-bold text-black text-base shadow-lg shadow-orange-500/20">
+                <i class="fa-solid fa-tags"></i>
             </div>
             <div>
-                <h1 class="text-base font-bold tracking-tight text-white leading-tight">Lalitha Naturals</h1>
-                <p class="text-[11px] font-medium text-zinc-400">Store Discount Calculator</p>
+                <h1 class="font-bold text-sm tracking-tight text-white leading-tight">Store Calculator</h1>
+                <p class="text-[10px] text-zinc-400 font-mono">GitHub Pages Ready</p>
             </div>
         </div>
-        <button onclick="toggleSettings()" class="p-2.5 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl hover:bg-zinc-800 transition active:scale-95 text-zinc-300" aria-label="Settings">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-        </button>
-    </header>
-
-    <!-- Main Workspace -->
-    <main class="space-y-4 flex-1">
-        
-        <!-- Settings Modal / Drawer -->
-        <div id="settingsDrawer" class="hidden bg-zinc-900 border border-zinc-800 rounded-2xl p-4 space-y-3 shadow-2xl transition-all">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xs font-semibold text-zinc-300 uppercase tracking-wider">Manage Custom Percentages</h2>
-                <span class="text-[10px] text-zinc-500">Saved to browser</span>
-            </div>
-            <div class="flex gap-2">
-                <input type="number" id="newPercentageInput" placeholder="Enter % (e.g. 15)" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 placeholder-zinc-600">
-                <button onclick="addCustomPercentage()" class="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs px-4 py-2 rounded-xl transition active:scale-95">Add</button>
-            </div>
-            <div id="customPercentagesList" class="flex flex-wrap gap-2 pt-1"></div>
-        </div>
-
-        <!-- Main Input Card -->
-        <div class="bg-zinc-900/90 border border-zinc-800 rounded-3xl p-5 space-y-4 shadow-xl backdrop-blur-md">
-            
-            <!-- MRP Input Block -->
-            <div>
-                <div class="flex justify-between items-center mb-1.5">
-                    <label for="mrpInput" class="text-[11px] font-bold tracking-wider text-zinc-400 uppercase">MRP Amount</label>
-                    <span class="text-[10px] text-zinc-500">INR (₹)</span>
-                </div>
-                <div class="relative flex items-center">
-                    <span class="absolute left-4 text-zinc-500 font-bold text-2xl">₹</span>
-                    <input type="number" id="mrpInput" placeholder="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl pl-10 pr-4 py-3 text-3xl font-mono-nums font-extrabold text-white focus:outline-none focus:border-emerald-500 transition text-right placeholder-zinc-700">
-                </div>
-            </div>
-
-            <!-- Discount Selection Grid -->
-            <div>
-                <label class="block text-[11px] font-bold tracking-wider text-zinc-400 mb-2 uppercase">Select Discount</label>
-                <div id="discountButtonsContainer" class="grid grid-cols-4 gap-2">
-                    <!-- Populated dynamically -->
-                </div>
-            </div>
-
-            <!-- Exchange Input Block -->
-            <div>
-                <label for="exchangeInput" class="block text-[11px] font-bold tracking-wider text-zinc-400 mb-1.5 uppercase">Exchange Value (Optional)</label>
-                <div class="relative flex items-center">
-                    <span class="absolute left-4 text-emerald-500/70 font-semibold text-lg">-₹</span>
-                    <input type="number" id="exchangeInput" placeholder="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl pl-11 pr-4 py-2.5 text-xl font-mono-nums font-semibold text-emerald-400 focus:outline-none focus:border-emerald-500 transition text-right placeholder-zinc-700">
-                </div>
-            </div>
-
-            <!-- Add Item Action Button -->
-            <button onclick="addItem()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-extrabold py-3.5 rounded-2xl text-base tracking-wide transition shadow-lg shadow-emerald-500/10 active:scale-[0.98] flex items-center justify-center gap-2">
-                <span>ADD ITEM</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v12m6-6H6"></path></svg>
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleHostingInfo()" class="text-xs bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-2 px-3 rounded-full transition font-semibold flex items-center space-x-1 border border-zinc-800 shadow">
+                <i class="fa-solid fa-cloud text-orange-400"></i>
+                <span>Host Guide</span>
+            </button>
+            <button onclick="toggleSettingsModal()" class="text-xs bg-zinc-900 hover:bg-zinc-800 text-zinc-300 p-2.5 rounded-full transition border border-zinc-800 shadow" title="Manage Custom Percentages">
+                <i class="fa-solid fa-gear text-orange-400"></i>
             </button>
         </div>
+    </header>
 
-        <!-- Itemized List Container -->
-        <div class="space-y-2">
-            <div class="flex justify-between items-center text-xs font-semibold text-zinc-400 px-1">
-                <span class="uppercase tracking-wider text-[10px]">Itemized Summary</span>
-                <button onclick="clearAllItems()" class="text-rose-400 hover:text-rose-300 hover:underline text-[11px] font-medium transition">Clear All</button>
+    <main class="w-full bg-zinc-950 border border-zinc-900 rounded-3xl shadow-2xl p-4 flex flex-col space-y-3">
+        
+        <!-- Massive Screen Area -->
+        <div class="bg-zinc-900/95 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-end min-h-[130px] text-right shadow-inner">
+            <div class="flex justify-between items-center mb-1">
+                <span id="active-disc-badge" class="text-xs text-orange-400 font-bold bg-orange-500/15 px-2.5 py-1 rounded-lg border border-orange-500/30 font-mono">20% OFF Active</span>
+                <span class="text-xs text-zinc-500 font-mono font-semibold">MRP INPUT</span>
             </div>
             
-            <div id="itemsListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1">
-                <!-- Dynamically populated items -->
+            <div class="grid grid-cols-2 gap-x-2 text-xs text-zinc-400 border-b border-zinc-800 pb-2 mb-1">
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px]">Save:</span>
+                    <span id="live-saved" class="text-emerald-400 font-mono font-bold text-sm">₹0.00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px]">Final:</span>
+                    <span id="live-final" class="text-white font-mono font-extrabold text-base">₹0.00</span>
+                </div>
+            </div>
+
+            <!-- Huge Number Display -->
+            <div id="mrp-display" class="text-5xl sm:text-6xl font-light font-mono-nums tracking-tight text-white truncate py-1">0</div>
+        </div>
+
+        <!-- Optional Item Exchange Value Input -->
+        <div class="bg-zinc-900/70 border border-zinc-800 rounded-2xl p-2.5 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-rotate text-orange-400 text-sm pl-1"></i>
+                <div>
+                    <div class="text-xs font-bold text-white">Item Exchange Value</div>
+                    <div class="text-[10px] text-zinc-400">Deducted from this item</div>
+                </div>
+            </div>
+            <div class="relative w-28">
+                <span class="absolute left-2.5 top-2 text-xs text-zinc-500 font-mono font-bold">₹</span>
+                <input type="number" id="current-item-exchange" placeholder="0" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl text-right text-xs text-white font-mono font-bold py-1.5 pr-2 pl-6 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
             </div>
         </div>
+
+        <!-- Dynamic Discount Buttons Container (20%, 40% + Permanent User Percentages) -->
+        <div>
+            <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[11px] uppercase tracking-wider text-zinc-400 font-bold">Select Discount %</span>
+                <span class="text-[10px] text-zinc-500 font-medium">Saved permanently</span>
+            </div>
+            <div id="discount-buttons-grid" class="grid grid-cols-4 gap-2">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- iPhone Keypad Grid with Large Bold Buttons -->
+        <div class="grid grid-cols-4 gap-2 pt-1">
+            <button onclick="clearCalculator()" class="ios-btn h-14 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xl rounded-2xl transition flex items-center justify-center shadow">C</button>
+            <button onclick="appendValue('00')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xl rounded-2xl transition flex items-center justify-center shadow">00</button>
+            <button onclick="backspace()" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xl rounded-2xl transition flex items-center justify-center shadow"><i class="fa-solid fa-delete-left"></i></button>
+            <button onclick="appendValue('.')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-2xl transition flex items-center justify-center shadow">.</button>
+
+            <button onclick="appendValue('7')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">7</button>
+            <button onclick="appendValue('8')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">8</button>
+            <button onclick="appendValue('9')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">9</button>
+            <button onclick="addItem()" class="ios-btn row-span-3 h-auto bg-gradient-to-b from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-extrabold text-base rounded-2xl transition flex flex-col items-center justify-center shadow-xl shadow-orange-500/30 py-4 border border-orange-400/30">
+                <i class="fa-solid fa-plus mb-1.5 text-xl"></i>
+                <span class="text-xs font-extrabold tracking-wide">ADD</span>
+            </button>
+
+            <button onclick="appendValue('4')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">4</button>
+            <button onclick="appendValue('5')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">5</button>
+            <button onclick="appendValue('6')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">6</button>
+
+            <button onclick="appendValue('1')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">1</button>
+            <button onclick="appendValue('2')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">2</button>
+            <button onclick="appendValue('3')" class="ios-btn h-14 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">3</button>
+
+            <button onclick="appendValue('0')" class="ios-btn h-14 col-span-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-2xl rounded-2xl transition flex items-center justify-center shadow">0</button>
+        </div>
+
     </main>
 
-    <!-- Bottom Summary Bar Footer -->
-    <footer class="mt-4 bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2 shadow-2xl">
-        <div class="flex justify-between text-xs text-zinc-400 font-mono-nums px-1">
-            <span>Items Count: <strong id="totalCount" class="text-zinc-100 font-bold">0</strong></span>
-            <span>Total MRP: ₹<strong id="totalMrp" class="text-zinc-100 font-bold">0.00</strong></span>
+    <section class="w-full bg-zinc-900/95 border border-zinc-800 rounded-3xl p-4 mt-3 shadow-2xl flex flex-col space-y-3">
+        <div class="flex justify-between items-center text-xs text-zinc-400 border-b border-zinc-800 pb-2">
+            <span class="font-bold text-zinc-200 text-sm">Bill Summary (<span id="summary-count">0</span> items)</span>
+            <span class="text-emerald-400 font-bold text-xs bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Saved: <span id="summary-saved" class="font-mono font-black">₹0.00</span></span>
         </div>
-        <div class="flex justify-between items-baseline pt-2 border-t border-zinc-800/80 px-1">
-            <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Final Payable</span>
-            <span class="text-3xl font-extrabold font-mono-nums text-emerald-400" id="grandTotal">₹0.00</span>
-        </div>
-    </footer>
 
-    <!-- Calculator Application Logic -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bg-zinc-950/60 p-3 rounded-2xl border border-zinc-800">
+                <div class="text-[10px] uppercase tracking-wider text-zinc-400 font-mono font-bold mb-1">Total MRP</div>
+                <div id="summary-total-mrp" class="text-xl sm:text-2xl font-black font-mono-nums text-zinc-300">₹0.00</div>
+            </div>
+            <div class="bg-orange-500/10 p-3 rounded-2xl border border-orange-500/30 text-right">
+                <div class="text-[10px] uppercase tracking-wider text-orange-400 font-mono font-black mb-1">Grand Total</div>
+                <div id="summary-grand-total" class="text-2xl sm:text-3xl font-black font-mono-nums text-white tracking-tight">₹0.00</div>
+            </div>
+        </div>
+
+        <div id="summary-exchange-container" class="hidden justify-between items-center bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 text-xs text-zinc-400">
+            <span>Total Exchange Deducted:</span>
+            <span id="summary-total-exchange" class="text-orange-400 font-mono font-bold">₹0.00</span>
+        </div>
+
+        <div class="flex space-x-2 pt-1">
+            <button onclick="toggleBillModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 py-3 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center justify-center space-x-2 border border-zinc-700 shadow">
+                <i class="fa-solid fa-receipt text-orange-400"></i>
+                <span>View Item List</span>
+            </button>
+            <button onclick="clearAllItems()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-4 py-3 rounded-2xl text-xs sm:text-sm font-bold transition border border-rose-500/30 shadow">
+                Reset
+            </button>
+        </div>
+    </section>
+
+    <div id="bill-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-list-check text-orange-500 text-lg"></i>
+                    <span>Itemized Bill List</span>
+                </h3>
+                <button onclick="toggleBillModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="bill-items-list" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                <div class="text-center text-zinc-500 py-12 text-sm font-medium">No items added yet.</div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-zinc-900 flex flex-col space-y-3">
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
+                    <span class="text-xs uppercase font-mono text-orange-400 font-bold">Final Payable Amount</span>
+                    <span id="modal-grand-total" class="text-xl font-black font-mono-nums text-white">₹0.00</span>
+                </div>
+                <button onclick="toggleBillModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition shadow-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-sm rounded-3xl p-5 flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-zinc-900 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-orange-500"></i>
+                    <span>Manage Custom %</span>
+                </h3>
+                <button onclick="toggleSettingsModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex space-x-2">
+                    <input type="number" id="new-pct-input" placeholder="e.g. 15 or 30" min="1" max="100" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-white font-bold text-sm focus:outline-none focus:border-orange-500 placeholder-zinc-500">
+                    <button onclick="addNewPercentage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-2xl font-bold text-sm transition shadow-lg">
+                        Add %
+                    </button>
+                </div>
+
+                <div>
+                    <div class="text-xs uppercase font-mono text-zinc-400 font-bold mb-2">Saved Percentages</div>
+                    <div id="saved-percentages-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-1">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-3 border-t border-zinc-900">
+                <button onclick="toggleSettingsModal()" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
+                    Done / Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="hosting-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-brands fa-github text-orange-400 text-lg"></i>
+                    <span>GitHub Pages Hosting Guide</span>
+                </h3>
+                <button onclick="toggleHostingInfo()" class="text-zinc-400 hover:text-white p-2 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 text-xs text-zinc-300 leading-relaxed overflow-y-auto max-h-[60vh] pr-1">
+                <p class="font-semibold text-white">Follow these simple steps to host this calculator for free on GitHub Pages:</p>
+                
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
+                    <span class="font-bold text-orange-400">Step 1: Save as index.html</span>
+                    <p class="text-zinc-400">Make sure this single file is named exactly <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">index.html</code>.</p>
+                </div>
+
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
+                    <span class="font-bold text-orange-400">Step 2: Create a GitHub Repository</span>
+                    <p class="text-zinc-400">Go to GitHub, create a new public repository (e.g., <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">store-calculator</code>).</p>
+                </div>
+
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
+                    <span class="font-bold text-orange-400">Step 3: Upload the file</span>
+                    <p class="text-zinc-400">Upload or commit <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">index.html</code> directly to the main branch of your repository.</p>
+                </div>
+
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
+                    <span class="font-bold text-orange-400">Step 4: Enable GitHub Pages</span>
+                    <p class="text-zinc-400">Go to your repository <strong>Settings</strong> > <strong>Pages</strong>. Under <strong>Build and deployment</strong>, set Branch to <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">main</code> (or <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">master</code>) and click <strong>Save</strong>.</p>
+                </div>
+
+                <p class="text-zinc-400 pt-1 font-mono">Your app will be live at: <strong class="text-orange-400">https://your-username.github.io/repository-name/</strong></p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-zinc-900">
+                <button onclick="toggleHostingInfo()" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition">
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl border border-zinc-800 transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-msg">Saved</span>
+    </div>
+
     <script>
-        let items = JSON.parse(localStorage.getItem('lalitha_calc_items')) || [];
-        let customDiscounts = JSON.parse(localStorage.getItem('lalitha_custom_discounts')) || [];
-        let selectedDiscount = 20;
+        let currentMrpInput = "0";
+        let currentDiscountPct = 20; 
+        
+        let permanentPercentages = JSON.parse(localStorage.getItem('github_store_custom_pcts') || '[20, 40]');
+        let billItems = JSON.parse(localStorage.getItem('github_store_items') || '[]');
 
-        function saveState() {
-            localStorage.setItem('lalitha_calc_items', JSON.stringify(items));
-            localStorage.setItem('lalitha_custom_discounts', JSON.stringify(customDiscounts));
-        }
+        const mrpDisplay = document.getElementById('mrp-display');
+        const activeDiscBadge = document.getElementById('active-disc-badge');
+        const liveSaved = document.getElementById('live-saved');
+        const liveFinal = document.getElementById('live-final');
+        const currentItemExchange = document.getElementById('current-item-exchange');
+        
+        const discountButtonsGrid = document.getElementById('discount-buttons-grid');
+        const savedPercentagesList = document.getElementById('saved-percentages-list');
+        const newPctInput = document.getElementById('new-pct-input');
+        
+        const summaryCount = document.getElementById('summary-count');
+        const summaryTotalMrp = document.getElementById('summary-total-mrp');
+        const summarySaved = document.getElementById('summary-saved');
+        const summaryGrandTotal = document.getElementById('summary-grand-total');
+        const summaryExchangeContainer = document.getElementById('summary-exchange-container');
+        const summaryTotalExchange = document.getElementById('summary-total-exchange');
+        
+        const billModal = document.getElementById('bill-modal');
+        const billItemsList = document.getElementById('bill-items-list');
+        const modalGrandTotal = document.getElementById('modal-grand-total');
+        
+        const settingsModal = document.getElementById('settings-modal');
+        const hostingModal = document.getElementById('hosting-modal');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-msg');
 
-        function setDiscount(val) {
-            selectedDiscount = val;
-            
-            // Reset all discount buttons styling
-            document.querySelectorAll('.disc-btn').forEach(b => {
-                b.className = 'disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold font-mono-nums transition border border-zinc-800 text-sm';
-            });
-
-            const customInput = document.getElementById('customDiscInput');
-            if (customInput && val !== parseFloat(customInput.value)) {
-                customInput.value = '';
-                customInput.classList.remove('border-emerald-500', 'text-emerald-400');
-                customInput.classList.add('border-zinc-800');
-            }
-            
-            if (val !== null) {
-                const activeBtn = document.getElementById(`btn-${val}`);
-                if (activeBtn) {
-                    activeBtn.className = 'disc-btn py-2.5 rounded-xl bg-emerald-500 text-zinc-950 font-extrabold font-mono-nums transition border border-emerald-400 shadow-md shadow-emerald-500/10 text-sm';
-                }
-            }
-        }
-
-        function setCustomDiscount(val) {
-            if (val && !isNaN(parseFloat(val))) {
-                selectedDiscount = parseFloat(val);
-                document.querySelectorAll('.disc-btn').forEach(b => {
-                    b.className = 'disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold font-mono-nums transition border border-zinc-800 text-sm';
-                });
-                const customInput = document.getElementById('customDiscInput');
-                if (customInput) {
-                    customInput.classList.remove('border-zinc-800');
-                    customInput.classList.add('border-emerald-500', 'text-emerald-400');
-                }
-            }
-        }
-
-        function toggleSettings() {
-            const drawer = document.getElementById('settingsDrawer');
-            drawer.classList.toggle('hidden');
-            renderCustomPercentages();
-        }
-
-        function addCustomPercentage() {
-            const val = parseFloat(document.getElementById('newPercentageInput').value);
-            if (!isNaN(val) && val > 0 && !customDiscounts.includes(val)) {
-                customDiscounts.push(val);
-                document.getElementById('newPercentageInput').value = '';
-                saveState();
-                renderCustomPercentages();
-                renderDiscountButtons();
-            }
-        }
-
-        function removeCustomPercentage(val) {
-            customDiscounts = customDiscounts.filter(d => d !== val);
-            saveState();
-            renderCustomPercentages();
+        window.onload = function() {
             renderDiscountButtons();
-        }
-
-        function renderCustomPercentages() {
-            const container = document.getElementById('customPercentagesList');
-            container.innerHTML = customDiscounts.map(d => `
-                <span class="inline-flex items-center gap-1.5 bg-zinc-950 text-xs text-zinc-300 px-3 py-1.5 rounded-xl border border-zinc-800 font-mono-nums">
-                    ${d}% 
-                    <button onclick="removeCustomPercentage(${d})" class="text-rose-400 hover:text-rose-300 ml-1 font-bold">✕</button>
-                </span>
-            `).join('') || '<span class="text-xs text-zinc-500">No custom percentages added.</span>';
-        }
+            renderSettingsPercentages();
+            updateLivePreview();
+            updateBillSummary();
+        };
 
         function renderDiscountButtons() {
-            const container = document.getElementById('discountButtonsContainer');
-            let html = `
-                <button onclick="setDiscount(20)" id="btn-20" class="disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold font-mono-nums transition border border-zinc-800 text-sm">20%</button>
-                <button onclick="setDiscount(40)" id="btn-40" class="disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold font-mono-nums transition border border-zinc-800 text-sm">40%</button>
-                <button onclick="setDiscount(0)" id="btn-0" class="disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold transition border border-zinc-800 text-xs uppercase">None</button>
-            `;
-            
-            customDiscounts.forEach(d => {
-                html += `<button onclick="setDiscount(${d})" id="btn-${d}" class="disc-btn py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 font-bold font-mono-nums transition border border-zinc-800 text-sm">${d}%</button>`;
+            let html = "";
+            permanentPercentages.forEach(pct => {
+                const isActive = (currentDiscountPct === pct);
+                const btnClass = isActive 
+                    ? "py-3 bg-orange-500/20 text-orange-400 border border-orange-500/50 text-xs sm:text-sm font-extrabold rounded-2xl transition shadow flex items-center justify-center font-mono-nums"
+                    : "py-3 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs sm:text-sm font-bold rounded-2xl border border-zinc-800 transition flex items-center justify-center font-mono-nums";
+                
+                html += `<button onclick="setDiscount(${pct})" class="${btnClass}">${pct}%</button>`;
             });
+            discountButtonsGrid.innerHTML = html;
+        }
 
-            html += `<input type="number" id="customDiscInput" placeholder="Custom %" oninput="setCustomDiscount(this.value)" class="bg-zinc-950 border border-zinc-800 rounded-xl text-center text-xs font-bold text-white focus:outline-none focus:border-emerald-500 placeholder-zinc-600">`;
+        function renderSettingsPercentages() {
+            let html = "";
+            permanentPercentages.forEach((pct, index) => {
+                html += `
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 flex items-center justify-between text-xs font-bold text-white font-mono-nums">
+                        <span>${pct}% OFF</span>
+                        ${permanentPercentages.length > 1 ? `<button onclick="removePercentage(${index})" class="text-zinc-500 hover:text-rose-400 ml-3"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    </div>
+                `;
+            });
+            savedPercentagesList.innerHTML = html;
+        }
 
-            container.innerHTML = html;
-            setDiscount(selectedDiscount);
+        function addNewPercentage() {
+            const val = parseInt(newPctInput.value);
+            if (isNaN(val) || val <= 0 || val > 100) {
+                showToast("Enter a valid percentage (1-100)!");
+                return;
+            }
+            if (permanentPercentages.includes(val)) {
+                showToast("Percentage already exists!");
+                return;
+            }
+
+            permanentPercentages.push(val);
+            permanentPercentages.sort((a, b) => a - b);
+            localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
+            
+            newPctInput.value = "";
+            renderDiscountButtons();
+            renderSettingsPercentages();
+            showToast(`Added ${val}% discount!`);
+        }
+
+        function removePercentage(index) {
+            const removed = permanentPercentages.splice(index, 1)[0];
+            if (currentDiscountPct === removed) {
+                currentDiscountPct = permanentPercentages[0] || 20;
+            }
+            localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
+            renderDiscountButtons();
+            renderSettingsPercentages();
+            updateLivePreview();
+            showToast(`Removed ${removed}% discount.`);
+        }
+
+        function appendValue(val) {
+            if (currentMrpInput === "0" && val !== ".") {
+                currentMrpInput = val;
+            } else {
+                if (val === "." && currentMrpInput.includes(".")) return;
+                if (currentMrpInput.length >= 10) return;
+                currentMrpInput += val;
+            }
+            updateLivePreview();
+        }
+
+        function backspace() {
+            if (currentMrpInput.length > 1) {
+                currentMrpInput = currentMrpInput.slice(0, -1);
+            } else {
+                currentMrpInput = "0";
+            }
+            updateLivePreview();
+        }
+
+        function clearCalculator() {
+            currentMrpInput = "0";
+            currentItemExchange.value = "";
+            updateLivePreview();
+        }
+
+        function setDiscount(pct) {
+            currentDiscountPct = pct;
+            activeDiscBadge.textContent = `${pct}% OFF Active`;
+            renderDiscountButtons();
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            mrpDisplay.textContent = currentMrpInput;
+            const mrp = parseFloat(currentMrpInput) || 0;
+            const saved = mrp * (currentDiscountPct / 100);
+            const exchange = parseFloat(currentItemExchange.value) || 0;
+            let final = (mrp - saved) - exchange;
+            if (final < 0) final = 0;
+
+            liveSaved.textContent = formatCurrency(saved);
+            liveFinal.textContent = formatCurrency(final);
         }
 
         function addItem() {
-            const mrp = parseFloat(document.getElementById('mrpInput').value);
-            const exchange = parseFloat(document.getElementById('exchangeInput').value) || 0;
-            
-            if (isNaN(mrp) || mrp <= 0) return;
+            const mrp = parseFloat(currentMrpInput) || 0;
+            if (mrp <= 0) {
+                showToast("Enter an MRP greater than 0!");
+                return;
+            }
 
-            const discAmount = (mrp * selectedDiscount) / 100;
-            const finalPrice = Math.max(0, mrp - discAmount - exchange);
+            const saved = mrp * (currentDiscountPct / 100);
+            const exchange = parseFloat(currentItemExchange.value) || 0;
+            let final = (mrp - saved) - exchange;
+            if (final < 0) final = 0;
 
-            items.unshift({
+            const newItem = {
+                id: Date.now(),
                 mrp: mrp,
-                discountPercent: selectedDiscount,
+                discountPct: currentDiscountPct,
+                saved: saved,
                 exchange: exchange,
-                final: finalPrice
-            });
+                final: final
+            };
 
-            document.getElementById('mrpInput').value = '';
-            document.getElementById('exchangeInput').value = '';
-            document.getElementById('mrpInput').focus();
-
-            saveState();
-            renderItems();
+            billItems.unshift(newItem);
+            saveStorage();
+            
+            currentMrpInput = "0";
+            currentItemExchange.value = "";
+            updateLivePreview();
+            updateBillSummary();
+            showToast(`Added MRP ₹${mrp} (${currentDiscountPct}%)`);
         }
 
-        function deleteItem(index) {
-            items.splice(index, 1);
-            saveState();
-            renderItems();
+        function removeItem(id) {
+            billItems = billItems.filter(item => item.id !== id);
+            saveStorage();
+            updateBillSummary();
+            showToast("Item removed.");
         }
 
         function clearAllItems() {
-            items = [];
-            saveState();
-            renderItems();
+            billItems = [];
+            saveStorage();
+            updateBillSummary();
+            showToast("Bill list reset.");
         }
 
-        function renderItems() {
-            const container = document.getElementById('itemsListContainer');
-            if (items.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-6 text-xs text-zinc-500 bg-zinc-900/40 rounded-2xl border border-zinc-800/50 flex flex-col items-center justify-center gap-1">
-                        <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        <span>No items in list</span>
-                    </div>`;
+        function saveStorage() {
+            localStorage.setItem('github_store_items', JSON.stringify(billItems));
+        }
+
+        function updateBillSummary() {
+            let totalMrp = 0;
+            let totalSaved = 0;
+            let totalExchange = 0;
+            let grandTotal = 0;
+
+            billItems.forEach(item => {
+                totalMrp += item.mrp;
+                totalSaved += item.saved;
+                totalExchange += item.exchange;
+                grandTotal += item.final;
+            });
+
+            summaryCount.textContent = billItems.length;
+            summaryTotalMrp.textContent = formatCurrency(totalMrp);
+            summarySaved.textContent = formatCurrency(totalSaved);
+            summaryGrandTotal.textContent = formatCurrency(grandTotal);
+
+            if (totalExchange > 0) {
+                summaryExchangeContainer.classList.remove('hidden');
+                summaryExchangeContainer.classList.add('flex');
+                summaryTotalExchange.textContent = formatCurrency(totalExchange);
             } else {
-                container.innerHTML = items.map((item, idx) => `
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-3 flex justify-between items-center text-sm shadow-sm hover:border-zinc-700 transition">
-                        <div class="space-y-1">
-                            <div class="font-mono-nums font-extrabold text-base text-white">₹${item.final.toFixed(2)}</div>
-                            <div class="text-[11px] text-zinc-400 flex items-center gap-1.5 flex-wrap">
-                                <span>MRP: ₹${item.mrp.toFixed(2)}</span>
-                                <span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-md font-semibold text-[10px] font-mono-nums">${item.discountPercent}% OFF</span>
-                                ${item.exchange > 0 ? `<span class="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded-md font-semibold text-[10px] font-mono-nums">Ex: -₹${item.exchange}</span>` : ''}
-                            </div>
-                        </div>
-                        <button onclick="deleteItem(${idx})" class="text-zinc-500 hover:text-rose-400 p-2 rounded-lg hover:bg-zinc-800 transition" aria-label="Delete item">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                    </div>
-                `).join('');
+                summaryExchangeContainer.classList.add('hidden');
+                summaryExchangeContainer.classList.remove('flex');
             }
 
-            let totalMrp = items.reduce((sum, i) => sum + i.mrp, 0);
-            let grandTotal = items.reduce((sum, i) => sum + i.final, 0);
-
-            document.getElementById('totalCount').innerText = items.length;
-            document.getElementById('totalMrp').innerText = totalMrp.toFixed(2);
-            document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
+            modalGrandTotal.textContent = formatCurrency(grandTotal);
+            renderBillModalList();
         }
 
-        // Initialize application state on page load
-        renderDiscountButtons();
-        renderItems();
+        function renderBillModalList() {
+            if (billItems.length === 0) {
+                billItemsList.innerHTML = `<div class="text-center text-zinc-500 py-12 text-sm font-medium">No items added yet.</div>`;
+                return;
+            }
+
+            let html = "";
+            billItems.forEach((item, index) => {
+                html += `
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-3.5 flex justify-between items-center shadow">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-300 font-mono text-xs flex items-center justify-center font-bold">
+                                ${billItems.length - index}
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-bold text-white font-mono-nums">₹${item.mrp.toLocaleString('en-IN')}</span>
+                                    <span class="text-[10px] bg-orange-500/20 text-orange-400 border border-orange-500/30 px-1.5 py-0.5 rounded font-mono font-bold">${item.discountPct}% OFF</span>
+                                </div>
+                                <div class="text-xs text-zinc-400 mt-0.5 flex flex-wrap gap-x-3">
+                                    <span>Save: <strong class="text-emerald-400 font-mono-nums">₹${item.saved.toFixed(2)}</strong></span>
+                                    ${item.exchange > 0 ? `<span>Exchange: <strong class="text-orange-400 font-mono-nums">-₹${item.exchange.toFixed(2)}</strong></span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="text-right">
+                                <div class="text-[10px] uppercase text-zinc-500 font-mono">Final</div>
+                                <div class="text-base font-extrabold text-white font-mono-nums">₹${item.final.toFixed(2)}</div>
+                            </div>
+                            <button onclick="removeItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-2 transition">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            billItemsList.innerHTML = html;
+        }
+
+        function formatCurrency(amount) {
+            return '₹' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function toggleBillModal() {
+            billModal.classList.toggle('hidden');
+        }
+
+        function toggleSettingsModal() {
+            settingsModal.classList.toggle('hidden');
+        }
+
+        function toggleHostingInfo() {
+            hostingModal.classList.toggle('hidden');
+        }
+
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-16', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-16', 'opacity-0');
+            }, 2200);
+        }
     </script>
 </body>
 </html>
