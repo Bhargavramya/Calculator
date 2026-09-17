@@ -8,11 +8,10 @@
     <meta name="apple-mobile-web-app-title" content="Store Calc">
     <meta name="theme-color" content="#000000">
     
-    <!-- Icons for Home Screen & Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23f97316'/%3E%3Ctext x='50' y='73' font-size='65' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3E%25%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23f97316'/%3E%3Ctext x='50' y='73' font-size='65' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3E%25%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAHCSURBVHja7JbbDcIgEEW3XbK1Wq1la40212tptTWqN2qpF/8QCAmJc3gM4P8YF6LgWbUAA3XAA6O4Vq0GMAQzI4UADMCYMgWAgO4pAQD84CQAAB0u8NqI1mC8sYAHAGgOABKkC8hFAGr7t+hVjG5HlG6XWnOqJ0X1F4j18AQQ6z/p4kQ+QGAAfF03oK53AOD4tA74kAEAY0qAC7jP3V4AGIq1A8ABjAD3d6z9AgBAkAEAMK7s9gUACAAAFvL3J7a3AQDQAQAm8gUAYk0XAFzAGAB8n6aXbNf3c1t9G/5a09/9AFA3uAFoAIQzAAAEAB9vU74FMAvAMACACwAAIADo5gIAYwAAoAEQAAgAIAIAEAD4wDUB8QACAAaAP/jM3B8I1W1H/6vCjQkAAEADAAAQAHpG+o8EAAAQAAAYAMH1j7I1AECQAgAAQJUAACIAABEAACgAAAEAAQAEAEAEABYAsAEAgAIAEAACAEAAACEAAAIAAAAQAIAEAAAQAIAEAAAAgAAACAAACAAAEAAAgAAAgAAAAEAAAgAAAMAAAEAAAIAAAIAAAAQAAAgAAAIAAAIAAAACAAACAAAAEAIAEAIAIAIAEAIAEAJvC1C248UAAAAAElFTkSuQmCC">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAHCSURBVHja7JbbDcIgEEW3XbK1Wq1la40212tptTWqN2qpF/8QCAmJc3gM4P8YF6LgWbUAA3XAA6O4Vq0GMAQzI4UADMCYMgWAgO4pAQD84CQAAB0u8NqI1mC8sYAHAGgOABKkC8hFAGr7t+hVjG5HlG6XWnOqJ0X1F4j18AQQ6z/p4kQ+QGAAfF03oK53AOD4tA74kAEAY0qAC7jP3V4AGIq1A8ABjAD3d6z9AgBAkAEAMK7s9gUACAAAFvL3J7a3AQDQAQAm8gUAYk0XAFzAGAB8n6aXbNf3c1t9G/5a09/9AFA3uAFoAIQzAAAEAB9vU74FMAvAMACACwAAIADo5gIAYwAAoAEQAAgAIAIAEAD4wDUB8QACAAaAP/jM3B8I1W1H/6vCjQkAAEADAAAQAHpG+o8EAAAQAAAYAMH1j7I1AECQAgAAQJUAACIAABEAACgAAAEAAQAEAEAEABYAsAEAgAIAEAACAEAAACEAAAIAAAAQAIAEAAAQAIAEAAAAgAAACAAACAAAEAAAgAAAgAAAAEAAAgAAAMAAAEAAAIAAAIAAAAQAAAgAAAIAAAIAAAACAAACAAAAEAIAEAIAIAIAEAIAEAJvC1C248UAAAAAElFTkSuQmCC">
 
-    <title>Store Discount Calculator - Pro</title>
+    <title>Store Discount Calculator</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -49,33 +48,13 @@
             border-radius: 4px;
         }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 180;
-            canvas.height = 180;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#f97316';
-            ctx.beginPath();
-            ctx.roundRect(0, 0, 180, 180, 40);
-            ctx.fill();
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 110px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('%', 90, 100);
-            const dataUrl = canvas.toDataURL('image/png');
-            let appleIcon = document.querySelector('link[rel="apple-touch-icon"]');
-            if (appleIcon) appleIcon.href = dataUrl;
-        });
-    </script>
 </head>
 <body class="min-h-screen flex flex-col justify-between items-center p-2 sm:p-3 max-w-md mx-auto">
 
     <header class="w-full flex justify-between items-center py-1 px-1 mb-1 border-b border-zinc-900">
         <div class="flex items-center space-x-2">
-            <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center font-bold text-black text-xs shadow-lg shadow-orange-500/20">
-                <i class="fa-solid fa-percent"></i>
+            <div class="w-7 h-7 rounded-xl overflow-hidden shadow-lg shadow-orange-500/20 border border-orange-500/30 bg-zinc-900 flex items-center justify-center">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAHCSURBVHja7JbbDcIgEEW3XbK1Wq1la40212tptTWqN2qpF/8QCAmJc3gM4P8YF6LgWbUAA3XAA6O4Vq0GMAQzI4UADMCYMgWAgO4pAQD84CQAAB0u8NqI1mC8sYAHAGgOABKkC8hFAGr7t+hVjG5HlG6XWnOqJ0X1F4j18AQQ6z/p4kQ+QGAAfF03oK53AOD4tA74kAEAY0qAC7jP3V4AGIq1A8ABjAD3d6z9AgBAkAEAMK7s9gUACAAAFvL3J7a3AQDQAQAm8gUAYk0XAFzAGAB8n6aXbNf3c1t9G/5a09/9AFA3uAFoAIQzAAAEAB9vU74FMAvAMACACwAAIADo5gIAYwAAoAEQAAgAIAIAEAD4wDUB8QACAAaAP/jM3B8I1W1H/6vCjQkAAEADAAAQAHpG+o8EAAAQAAAYAMH1j7I1AECQAgAAQJUAACIAABEAACgAAAEAAQAEAEAEABYAsAEAgAIAEAACAEAAACEAAAIAAAAQAIAEAAAQAIAEAAAAgAAACAAACAAAEAAAgAAAgAAAAEAAAgAAAMAAAEAAAIAAAIAAAAQAAAgAAAIAAAIAAAACAAACAAAAEAIAEAIAIAIAEAIAEAJvC1C248UAAAAAElFTkSuQmCC" alt="Calculator App Icon" class="w-full h-full object-cover">
             </div>
             <div>
                 <h1 class="font-bold text-xs tracking-tight text-white leading-tight">Store Calculator</h1>
@@ -86,10 +65,6 @@
                 <i class="fa-solid fa-share-nodes text-orange-400"></i>
                 <span>Share</span>
             </button>
-            <button onclick="toggleHostingInfo()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 px-2 rounded-full transition font-semibold flex items-center space-x-1 border border-zinc-800 shadow" title="Host">
-                <i class="fa-solid fa-cloud text-orange-400"></i>
-                <span>Host</span>
-            </button>
             <button onclick="toggleSettingsModal()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 p-2 rounded-full transition border border-zinc-800 shadow" title="Manage Custom Percentages">
                 <i class="fa-solid fa-gear text-orange-400"></i>
             </button>
@@ -98,7 +73,6 @@
 
     <main class="w-full bg-zinc-950 border border-zinc-900 rounded-2xl shadow-2xl p-2.5 flex flex-col space-y-2">
         
-        <!-- Scrap Exchange Section at Top (Persistent) -->
         <div class="bg-zinc-900/90 border border-zinc-800 rounded-xl p-2 flex flex-col space-y-2">
             <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleScrapSection()">
                 <div class="flex items-center space-x-1.5">
@@ -152,7 +126,7 @@
                 </div>
 
                 <div class="flex justify-end pt-0.5">
-                    <button onclick="clearScrapValues(event)" class="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-md font-semibold transition border border-zinc-700 flex items-center space-x-1">
+                    <button onclick="confirmClearScrap(event)" class="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-md font-semibold transition border border-zinc-700 flex items-center space-x-1">
                         <i class="fa-solid fa-rotate-left"></i>
                         <span>Clear Scrap Inputs</span>
                     </button>
@@ -160,8 +134,7 @@
             </div>
         </div>
 
-        <!-- Calculator Display Screen -->
-        <div class="bg-zinc-900/95 border border-zinc-800/90 rounded-xl p-2.5 flex flex-col justify-end min-h-[75px] text-right shadow-inner">
+        <div class="bg-zinc-900/95 border border-zinc-800/90 rounded-xl p-2.5 flex flex-col justify-end min-h-[70px] text-right shadow-inner">
             <div class="flex justify-between items-center mb-0.5">
                 <span id="active-disc-badge" class="text-[10px] text-orange-400 font-bold bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30 font-mono">20% OFF Active</span>
                 <span class="text-[9px] text-zinc-500 font-mono font-semibold">MRP INPUT</span>
@@ -181,7 +154,6 @@
             <div id="mrp-display" class="text-xl sm:text-2xl font-light font-mono-nums tracking-tight text-white truncate py-0.5">0</div>
         </div>
 
-        <!-- Discount % Selector Grid -->
         <div>
             <div class="flex justify-between items-center mb-1">
                 <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Select Discount %</span>
@@ -190,35 +162,34 @@
             <div id="discount-buttons-grid" class="grid grid-cols-4 gap-1"></div>
         </div>
 
-        <!-- Keypad Grid (Compact rectangular cells matching reference scale) -->
         <div class="grid grid-cols-4 gap-1">
             <!-- Row 1 -->
-            <button onclick="clearCalculator()" class="ios-btn w-full h-12 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-lg rounded-xl transition flex items-center justify-center shadow">C</button>
-            <button onclick="appendValue('00')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-lg rounded-xl transition flex items-center justify-center shadow">00</button>
-            <button onclick="backspace()" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-lg rounded-xl transition flex items-center justify-center shadow"><i class="fa-solid fa-delete-left"></i></button>
+            <button onclick="clearCalculator()" class="ios-btn w-full h-11 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">C</button>
+            <button onclick="appendValue('00')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">00</button>
+            <button onclick="backspace()" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow"><i class="fa-solid fa-delete-left text-xs"></i></button>
             <button onclick="addItem()" class="ios-btn row-span-5 h-full bg-gradient-to-br from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-black rounded-xl transition flex flex-col items-center justify-center shadow-lg shadow-orange-500/25 border border-orange-400/30 py-3">
-                <i class="fa-solid fa-plus text-lg mb-1"></i>
+                <i class="fa-solid fa-plus text-base mb-1"></i>
                 <span class="font-black tracking-wider text-[11px]">ADD</span>
             </button>
 
             <!-- Row 2 -->
-            <button onclick="appendValue('7')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">7</button>
-            <button onclick="appendValue('8')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">8</button>
-            <button onclick="appendValue('9')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">9</button>
+            <button onclick="appendValue('7')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">7</button>
+            <button onclick="appendValue('8')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">8</button>
+            <button onclick="appendValue('9')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">9</button>
 
             <!-- Row 3 -->
-            <button onclick="appendValue('4')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">4</button>
-            <button onclick="appendValue('5')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">5</button>
-            <button onclick="appendValue('6')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">6</button>
+            <button onclick="appendValue('4')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">4</button>
+            <button onclick="appendValue('5')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">5</button>
+            <button onclick="appendValue('6')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">6</button>
 
             <!-- Row 4 -->
-            <button onclick="appendValue('1')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">1</button>
-            <button onclick="appendValue('2')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">2</button>
-            <button onclick="appendValue('3')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">3</button>
+            <button onclick="appendValue('1')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">1</button>
+            <button onclick="appendValue('2')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">2</button>
+            <button onclick="appendValue('3')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">3</button>
 
-            <!-- Row 5 (0 spans col 1-2, . in col 3, ADD spans all 5 rows in col 4) -->
-            <button onclick="appendValue('0')" class="ios-btn col-span-2 w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">0</button>
-            <button onclick="appendValue('.')" class="ios-btn w-full h-12 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-2xl rounded-xl transition flex items-center justify-center shadow">.</button>
+            <!-- Row 5 -->
+            <button onclick="appendValue('0')" class="ios-btn col-span-2 w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">0</button>
+            <button onclick="appendValue('.')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">.</button>
         </div>
 
     </main>
@@ -250,13 +221,12 @@
                 <i class="fa-solid fa-receipt text-orange-400"></i>
                 <span>View Item List</span>
             </button>
-            <button onclick="resetEverything()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-3 py-2 rounded-xl text-xs font-bold transition border border-rose-500/30 shadow">
+            <button onclick="confirmReset()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-3 py-2 rounded-xl text-xs font-bold transition border border-rose-500/30 shadow">
                 Reset
             </button>
         </div>
     </section>
 
-    <!-- Bill Items Modal with Eye Toggle and Delete Button -->
     <div id="bill-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
             <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
@@ -291,7 +261,26 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-3xl p-5 flex flex-col items-center text-center shadow-2xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center text-xl font-bold border border-rose-500/30">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h3 id="confirm-title" class="font-bold text-base text-white mb-1">Confirm Action</h3>
+                <p id="confirm-desc" class="text-xs text-zinc-400">Are you sure you want to proceed with this action?</p>
+            </div>
+            <div class="flex space-x-2 w-full pt-2">
+                <button id="confirm-yes-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                    Yes, Proceed
+                </button>
+                <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-2.5 rounded-xl text-xs font-bold transition border border-zinc-800">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-zinc-950 border border-zinc-800 w-full max-w-sm rounded-3xl p-5 flex flex-col shadow-2xl">
             <div class="flex justify-between items-center mb-4 border-b border-zinc-900 pb-3">
@@ -326,54 +315,6 @@
         </div>
     </div>
 
-    <!-- Hosting Modal -->
-    <div id="hosting-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 flex flex-col shadow-2xl">
-            <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
-                <h3 class="font-bold text-base text-white flex items-center space-x-2">
-                    <i class="fa-brands fa-github text-orange-400 text-lg"></i>
-                    <span>GitHub Pages Hosting Guide</span>
-                </h3>
-                <button onclick="toggleHostingInfo()" class="text-zinc-400 hover:text-white p-2 text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="space-y-3 text-xs text-zinc-300 leading-relaxed overflow-y-auto max-h-[60vh] pr-1">
-                <p class="font-semibold text-white">Follow these simple steps to host this calculator for free on GitHub Pages:</p>
-                
-                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
-                    <span class="font-bold text-orange-400">Step 1: Save as index.html</span>
-                    <p class="text-zinc-400">Make sure this single file is named exactly <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">index.html</code>.</p>
-                </div>
-
-                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
-                    <span class="font-bold text-orange-400">Step 2: Create a GitHub Repository</span>
-                    <p class="text-zinc-400">Go to GitHub, create a new public repository (e.g., <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">store-calculator</code>).</p>
-                </div>
-
-                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
-                    <span class="font-bold text-orange-400">Step 3: Upload the file</span>
-                    <p class="text-zinc-400">Upload or commit <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">index.html</code> directly to the main branch of your repository.</p>
-                </div>
-
-                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 space-y-1">
-                    <span class="font-bold text-orange-400">Step 4: Enable GitHub Pages</span>
-                    <p class="text-zinc-400">Go to your repository <strong>Settings</strong> > <strong>Pages</strong>. Under <strong>Build and deployment</strong>, set Branch to <code class="text-white bg-zinc-950 px-1.5 py-0.5 rounded font-mono">main</code> and click <strong>Save</strong>.</p>
-                </div>
-
-                <p class="text-zinc-400 pt-1 font-mono">Your app will be live at: <strong class="text-orange-400">https://your-username.github.io/repository-name/</strong></p>
-            </div>
-
-            <div class="mt-4 pt-3 border-t border-zinc-900">
-                <button onclick="toggleHostingInfo()" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition">
-                    Got It
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl border border-zinc-800 transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
         <i class="fa-solid fa-circle-check text-emerald-400"></i>
         <span id="toast-msg">Saved</span>
@@ -385,8 +326,6 @@
         
         let permanentPercentages = JSON.parse(localStorage.getItem('github_store_custom_pcts') || '[20, 40]');
         let billItems = JSON.parse(localStorage.getItem('github_store_items') || '[]');
-
-        // Persistent scrap inputs & active toggle state (preserved across reloads)
         let savedScrapData = JSON.parse(localStorage.getItem('github_store_scrap') || '{"alWt":"","alH":"","stWt":"","stH":"","active":true}');
 
         const mrpDisplay = document.getElementById('mrp-display');
@@ -418,7 +357,11 @@
         const modalGrandTotal = document.getElementById('modal-grand-total');
         
         const settingsModal = document.getElementById('settings-modal');
-        const hostingModal = document.getElementById('hosting-modal');
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmDesc = document.getElementById('confirm-desc');
+        const confirmYesBtn = document.getElementById('confirm-yes-btn');
+
         const scrapBody = document.getElementById('scrap-body');
         const scrapToggleIcon = document.getElementById('scrap-toggle-icon');
 
@@ -426,10 +369,10 @@
         const toastMsg = document.getElementById('toast-msg');
 
         window.onload = function() {
-            if(exAluminumWeight) exAluminumWeight.value = savedScrapData.alWt;
-            if(exAluminumHandles) exAluminumHandles.value = savedScrapData.alH;
-            if(exSteelWeight) exSteelWeight.value = savedScrapData.stWt;
-            if(exSteelHandles) exSteelHandles.value = savedScrapData.stH;
+            if(exAluminumWeight) exAluminumWeight.value = savedScrapData.alWt || "";
+            if(exAluminumHandles) exAluminumHandles.value = savedScrapData.alH || "";
+            if(exSteelWeight) exSteelWeight.value = savedScrapData.stWt || "";
+            if(exSteelHandles) exSteelHandles.value = savedScrapData.stH || "";
             if(savedScrapData.active === undefined) savedScrapData.active = true;
 
             renderDiscountButtons();
@@ -523,29 +466,42 @@
             showToast("Calculator cleared.");
         }
 
-        function clearScrapValues(e) {
+        function confirmClearScrap(e) {
             if (e) e.stopPropagation();
-            if (exAluminumWeight) exAluminumWeight.value = "";
-            if (exAluminumHandles) exAluminumHandles.value = "";
-            if (exSteelWeight) exSteelWeight.value = "";
-            if (exSteelHandles) exSteelHandles.value = "";
-            savedScrapData.active = true;
-            saveScrapStorage();
-            updateLivePreview();
-            updateBillSummary();
-            if (e) showToast("Scrap input values cleared.");
+            openConfirmModal(
+                "Clear Scrap Inputs",
+                "Are you sure you want to reset all scrap exchange weight and handle counts?",
+                () => {
+                    clearScrapValues();
+                    showToast("Scrap input values cleared.");
+                }
+            );
         }
 
-        function clearScrapCompletely() {
+        function clearScrapValues() {
             if (exAluminumWeight) exAluminumWeight.value = "";
             if (exAluminumHandles) exAluminumHandles.value = "";
             if (exSteelWeight) exSteelWeight.value = "";
             if (exSteelHandles) exSteelHandles.value = "";
+            savedScrapData.alWt = "";
+            savedScrapData.alH = "";
+            savedScrapData.stWt = "";
+            savedScrapData.stH = "";
             savedScrapData.active = true;
             saveScrapStorage();
             updateLivePreview();
             updateBillSummary();
-            showToast("Scrap exchange deleted.");
+        }
+
+        function confirmDeleteScrap() {
+            openConfirmModal(
+                "Delete Scrap Exchange",
+                "Are you sure you want to remove scrap exchange inputs completely?",
+                () => {
+                    clearScrapValues();
+                    showToast("Scrap exchange deleted.");
+                }
+            );
         }
 
         function saveScrapStorage() {
@@ -570,20 +526,26 @@
         }
 
         function toggleScrapActive() {
-            savedScrapData.active = !savedScrapData.active;
+            savedScrapData.active = savedScrapData.active === false ? true : false;
             saveScrapStorage();
             updateBillSummary();
         }
 
-        function resetEverything() {
-            currentMrpInput = "0";
-            clearScrapValues();
-            billItems = [];
-            localStorage.removeItem('github_store_items');
-            localStorage.removeItem('github_store_scrap');
-            updateLivePreview();
-            updateBillSummary();
-            showToast("All data reset completely.");
+        function confirmReset() {
+            openConfirmModal(
+                "Reset All Data",
+                "Are you sure you want to reset all bill items and scrap records? This action cannot be undone.",
+                () => {
+                    currentMrpInput = "0";
+                    clearScrapValues();
+                    billItems = [];
+                    localStorage.removeItem('github_store_items');
+                    localStorage.removeItem('github_store_scrap');
+                    updateLivePreview();
+                    updateBillSummary();
+                    showToast("All data reset completely.");
+                }
+            );
         }
 
         function setDiscount(pct) {
@@ -676,17 +638,23 @@
         function toggleItemActive(id) {
             const item = billItems.find(i => i.id === id);
             if (item) {
-                item.active = !item.active;
+                item.active = item.active === false ? true : false;
                 saveStorage();
                 updateBillSummary();
             }
         }
 
-        function removeItem(id) {
-            billItems = billItems.filter(item => item.id !== id);
-            saveStorage();
-            updateBillSummary();
-            showToast("Item removed.");
+        function confirmRemoveItem(id) {
+            openConfirmModal(
+                "Delete Item",
+                "Are you sure you want to remove this item from the bill?",
+                () => {
+                    billItems = billItems.filter(item => item.id !== id);
+                    saveStorage();
+                    updateBillSummary();
+                    showToast("Item removed.");
+                }
+            );
         }
 
         function saveStorage() {
@@ -786,7 +754,7 @@
                                 <button onclick="toggleItemActive(${item.id})" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isActive ? 'Disable item' : 'Enable item'}">
                                     <i class="${eyeIcon} text-sm"></i>
                                 </button>
-                                <button onclick="removeItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete">
+                                <button onclick="confirmRemoveItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete">
                                     <i class="fa-solid fa-trash-can text-sm"></i>
                                 </button>
                             </div>
@@ -795,7 +763,6 @@
                 }
             });
 
-            // Scrap Exchange entry with eye toggle icon and delete button
             if (hasExchange) {
                 const isScrapActive = savedScrapData.active !== false;
                 const scrapOpacity = isScrapActive ? "" : "opacity-40 grayscale";
@@ -820,7 +787,7 @@
                             <button onclick="toggleScrapActive()" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isScrapActive ? 'Disable scrap deduction' : 'Enable scrap deduction'}">
                                 <i class="${scrapEyeIcon} text-sm"></i>
                             </button>
-                            <button onclick="clearScrapCompletely()" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete Scrap">
+                            <button onclick="confirmDeleteScrap()" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete Scrap">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
@@ -857,7 +824,7 @@
             if (grandTotal < 0) grandTotal = 0;
 
             let itemCount = activeItems.length + (totalExchange > 0 ? 1 : 0);
-            let docHeight = 110 + (itemCount * 22);
+            let docHeight = 120 + (itemCount * 26);
             const doc = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -865,23 +832,24 @@
             });
 
             doc.setFont("Courier", "bold");
-            doc.setFontSize(11);
+            doc.setFontSize(10);
 
-            let y = 8;
+            let y = 10;
             const pageWidth = 80;
-            const margin = 4;
+            const margin = 5;
 
+            // Corporate Thermal Receipt Header
             doc.text("STORE DISCOUNT INVOICE", pageWidth / 2, y, { align: 'center' });
-            y += 5;
-            
+            y += 4;
             doc.setFontSize(8);
             doc.setFont("Courier", "normal");
             doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
             y += 4;
-            doc.text(`Date: ${new Date().toLocaleDateString('en-IN')} ${new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'})}`, margin, y);
+            doc.text(`Date : ${new Date().toLocaleDateString('en-IN')}`, margin, y);
+            doc.text(`Time : ${new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'})}`, pageWidth - margin, y, { align: 'right' });
             y += 4;
             doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
-            y += 5;
+            y += 6;
 
             let printIndex = 1;
             activeItems.forEach((item) => {
@@ -890,9 +858,9 @@
                 doc.text(`[${item.discountPct}% OFF]`, pageWidth - margin, y, { align: 'right' });
                 y += 4;
                 doc.setFont("Courier", "normal");
-                doc.text(`   Saved: ₹${item.saved.toFixed(2)}`, margin, y);
+                doc.text(`   Discount Savings : ₹${item.saved.toFixed(2)}`, margin, y);
                 y += 4;
-                doc.text(`   Final: ₹${item.final.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
+                doc.text(`   Final Item Price : ₹${item.final.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
                 y += 5;
                 doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
                 y += 5;
@@ -900,12 +868,12 @@
 
             if (totalExchange > 0) {
                 doc.setFont("Courier", "bold");
-                doc.text(`${printIndex++}. Scrap Exchange`, margin, y);
+                doc.text(`${printIndex++}. Scrap Exchange Credit`, margin, y);
                 y += 4;
                 doc.setFont("Courier", "normal");
-                doc.text(`   ${exchangeObj.details || 'Weight deduction'}`, margin, y);
+                doc.text(`   Details: ${exchangeObj.details || 'Weight deduction'}`, margin, y);
                 y += 4;
-                doc.text(`   Deduction: -₹${totalExchange.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
+                doc.text(`   Credit Deduction: -₹${totalExchange.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
                 y += 5;
                 doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
                 y += 5;
@@ -913,27 +881,43 @@
 
             y += 2;
             doc.setFont("Courier", "bold");
-            doc.text(`TOTAL MRP     : ₹${totalMrp.toFixed(2)}`, margin, y);
+            doc.text(`TOTAL MRP         : ₹${totalMrp.toFixed(2)}`, margin, y);
             y += 4;
-            doc.text(`TOTAL SAVED   : ₹${totalSaved.toFixed(2)}`, margin, y);
+            doc.text(`TOTAL SAVED       : ₹${totalSaved.toFixed(2)}`, margin, y);
             y += 4;
             if (totalExchange > 0) {
-                doc.text(`EXCHANGE DED. : -₹${totalExchange.toFixed(2)}`, margin, y);
+                doc.text(`SCRAP CREDIT      : -₹${totalExchange.toFixed(2)}`, margin, y);
                 y += 4;
             }
             doc.text("========================================", pageWidth / 2, y, { align: 'center' });
             y += 5;
             doc.setFontSize(10);
-            doc.text(`GRAND PAYABLE : ₹${grandTotal.toFixed(2)}`, margin, y);
+            doc.text(`GRAND PAYABLE     : ₹${grandTotal.toFixed(2)}`, margin, y);
             y += 6;
             doc.setFontSize(8);
             doc.setFont("Courier", "normal");
             doc.text("========================================", pageWidth / 2, y, { align: 'center' });
             y += 6;
-            doc.text("Thank You! Visit Again.", pageWidth / 2, y, { align: 'center' });
+            doc.text("Thank You for Shopping with Us!", pageWidth / 2, y, { align: 'center' });
+            y += 4;
+            doc.text("Please retain receipt for exchanges.", pageWidth / 2, y, { align: 'center' });
 
             doc.save(`Thermal_Receipt_${new Date().toISOString().slice(0,10)}.pdf`);
-            showToast("Thermal receipt PDF downloaded!");
+            showToast("Corporate thermal PDF downloaded!");
+        }
+
+        function openConfirmModal(title, desc, onConfirmCallback) {
+            confirmTitle.textContent = title;
+            confirmDesc.textContent = desc;
+            confirmYesBtn.onclick = function() {
+                closeConfirmModal();
+                onConfirmCallback();
+            };
+            confirmModal.classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            confirmModal.classList.add('hidden');
         }
 
         function toggleBillModal() {
@@ -944,23 +928,19 @@
             settingsModal.classList.toggle('hidden');
         }
 
-        function toggleHostingInfo() {
-            hostingModal.classList.toggle('hidden');
-        }
-
         function shareApp() {
             const shareData = {
                 title: 'Store Discount Calculator',
                 text: 'Check out this awesome Store Discount Calculator app!',
-                url: 'https://bhargavramya.github.io/Calculator/'
+                url: window.location.href
             };
 
             if (navigator.share) {
                 navigator.share(shareData).catch(() => {
-                    copyToClipboard('https://bhargavramya.github.io/Calculator/');
+                    copyToClipboard(window.location.href);
                 });
             } else {
-                copyToClipboard('https://bhargavramya.github.io/Calculator/');
+                copyToClipboard(window.location.href);
             }
         }
 
