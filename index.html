@@ -6,8 +6,6 @@
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<!-- FontAwesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
 <!-- jsPDF Library for Thermal Receipt Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -53,11 +51,11 @@
     </div>
     <div class="flex items-center space-x-1.5">
         <button onclick="shareApp()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 px-2.5 rounded-full transition font-semibold flex items-center space-x-1 border border-zinc-800 shadow" title="Share App">
-            <i class="fa-solid fa-share-nodes text-orange-400"></i>
+            <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
             <span>Share</span>
         </button>
         <button onclick="toggleSettingsModal()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 p-2 rounded-full transition border border-zinc-800 shadow flex items-center justify-center" title="Manage Custom Percentages">
-            <i class="fa-solid fa-gear text-orange-400"></i>
+            <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
         </button>
     </div>
 </header>
@@ -68,7 +66,7 @@
     <div class="bg-zinc-900/90 border border-zinc-800 rounded-xl p-2 flex flex-col space-y-2">
         <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleScrapSection()">
             <div class="flex items-center space-x-1.5">
-                <i class="fa-solid fa-rotate text-orange-400 text-xs pl-0.5"></i>
+                <svg class="w-3.5 h-3.5 text-orange-400 pl-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <div>
                     <div class="text-[11px] font-bold text-white">Scrap Exchange Value</div>
                     <div class="text-[9px] text-zinc-400">Aluminum & Steel deduction (-100g/handle)</div>
@@ -78,7 +76,7 @@
                 <div class="text-right">
                     <div id="live-total-exchange" class="text-orange-400 font-mono font-bold text-[11px]">₹0.00</div>
                 </div>
-                <i id="scrap-toggle-icon" class="fa-solid fa-chevron-down text-zinc-400 text-[11px] transition-transform duration-200"></i>
+                <svg id="scrap-toggle-icon" class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </div>
         </div>
 
@@ -119,7 +117,7 @@
 
             <div class="flex justify-end pt-0.5">
                 <button onclick="confirmClearScrap(event)" class="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-md font-semibold transition border border-zinc-700 flex items-center space-x-1">
-                    <i class="fa-solid fa-rotate-left"></i>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     <span>Clear Scrap Inputs</span>
                 </button>
             </div>
@@ -162,10 +160,10 @@
         <button onclick="clearCalculator()" class="ios-btn w-full h-11 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">C</button>
         <button onclick="appendValue('00')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">00</button>
         <button onclick="backspace()" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow" title="Backspace">
-            <i class="fa-solid fa-delete-left text-xs"></i>
+            <svg class="w-4 h-4 text-zinc-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v12a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"/></svg>
         </button>
         <button onclick="addItem()" class="ios-btn row-span-5 h-full bg-gradient-to-br from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-black rounded-xl transition flex flex-col items-center justify-center shadow-lg shadow-orange-500/25 border border-orange-400/30 py-3">
-            <i class="fa-solid fa-plus text-base mb-1"></i>
+            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             <span class="font-black tracking-wider text-[11px]">ADD</span>
         </button>
 
@@ -215,7 +213,7 @@
 
     <div class="flex space-x-2 pt-0.5">
         <button onclick="toggleBillModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 border border-zinc-700 shadow">
-            <i class="fa-solid fa-receipt text-orange-400"></i>
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
             <span>View Item List</span>
         </button>
         <button onclick="confirmReset()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-3 py-2 rounded-xl text-xs font-bold transition border border-rose-500/30 shadow">
@@ -228,11 +226,11 @@
     <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
         <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
             <h3 class="font-bold text-base text-white flex items-center space-x-2">
-                <i class="fa-solid fa-list-check text-orange-500 text-lg"></i>
+                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                 <span>Itemized Bill List</span>
             </h3>
             <button onclick="toggleBillModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
-                <i class="fa-solid fa-xmark"></i>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
         
@@ -247,7 +245,7 @@
             </div>
             <div class="flex space-x-2">
                 <button onclick="downloadPDF()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition shadow-lg flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-print"></i>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                     <span>Download Thermal Receipt PDF</span>
                 </button>
                 <button onclick="toggleBillModal()" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 px-5 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
@@ -262,7 +260,7 @@
 <div id="confirm-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-3xl p-5 flex flex-col items-center text-center shadow-2xl space-y-4">
         <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center text-xl font-bold border border-rose-500/30">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
         <div>
             <h3 id="confirm-title" class="font-bold text-base text-white mb-1">Confirm Action</h3>
@@ -284,11 +282,11 @@
     <div class="bg-zinc-950 border border-zinc-800 w-full max-w-sm rounded-3xl p-5 flex flex-col shadow-2xl">
         <div class="flex justify-between items-center mb-4 border-b border-zinc-900 pb-3">
             <h3 class="font-bold text-base text-white flex items-center space-x-2">
-                <i class="fa-solid fa-sliders text-orange-500"></i>
+                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
                 <span>Manage Custom %</span>
             </h3>
             <button onclick="toggleSettingsModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
-                <i class="fa-solid fa-xmark"></i>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
 
@@ -316,7 +314,7 @@
 
 <!-- Toast Notification -->
 <div id="toast" class="fixed bottom-6 bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl border border-zinc-800 transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
-    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     <span id="toast-msg">Saved</span>
 </div>
 
@@ -400,7 +398,7 @@
             html += `
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 flex items-center justify-between text-xs font-bold text-white font-mono-nums">
                     <span>${pct}% OFF</span>
-                    ${permanentPercentages.length > 1 ? `<button onclick="removePercentage(${index})" class="text-zinc-500 hover:text-rose-400 ml-3"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    ${permanentPercentages.length > 1 ? `<button onclick="removePercentage(${index})" class="text-zinc-500 hover:text-rose-400 ml-3"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
                 </div>
             `;
         });
@@ -727,7 +725,9 @@
         billItems.forEach((item) => {
             const isActive = item.active !== false;
             const opacityClass = isActive ? "" : "opacity-40 grayscale";
-            const eyeIcon = isActive ? "fa-solid fa-eye text-orange-400" : "fa-solid fa-eye-slash text-zinc-500";
+            const eyeIconSvg = isActive 
+                ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
+                : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
 
             if (item.type === 'product') {
                 html += `
@@ -752,10 +752,10 @@
                                 <div class="text-base font-extrabold text-white font-mono-nums">₹${item.final.toFixed(2)}</div>
                             </div>
                             <button onclick="toggleItemActive(${item.id})" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isActive ? 'Disable item' : 'Enable item'}">
-                                <i class="${eyeIcon} text-sm"></i>
+                                ${eyeIconSvg}
                             </button>
                             <button onclick="confirmRemoveItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete">
-                                <i class="fa-solid fa-trash-can text-sm"></i>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         </div>
                     </div>
@@ -766,7 +766,9 @@
         if (hasExchange) {
             const isScrapActive = savedScrapData.active !== false;
             const scrapOpacity = isScrapActive ? "" : "opacity-40 grayscale";
-            const scrapEyeIcon = isScrapActive ? "fa-solid fa-eye text-orange-400" : "fa-solid fa-eye-slash text-zinc-500";
+            const scrapEyeIconSvg = isScrapActive 
+                ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
+                : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
 
             html += `
                 <div class="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-3.5 flex justify-between items-center shadow transition ${scrapOpacity}">
@@ -785,10 +787,10 @@
                             <div class="text-base font-extrabold text-orange-400 font-mono-nums">-₹${exchangeObj.amount.toFixed(2)}</div>
                         </div>
                         <button onclick="toggleScrapActive()" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isScrapActive ? 'Disable scrap deduction' : 'Enable scrap deduction'}">
-                            <i class="${scrapEyeIcon} text-sm"></i>
+                            ${scrapEyeIconSvg}
                         </button>
                         <button onclick="confirmDeleteScrap()" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete Scrap">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     </div>
                 </div>
