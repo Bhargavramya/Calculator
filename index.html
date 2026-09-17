@@ -1,977 +1,1078 @@
-<link rel="icon" type="image/png" href="calc icon.png?v=999">
-<link rel="apple-touch-icon" href="calc icon.png?v=999">
-<link rel="apple-touch-icon-precomposed" href="calc icon.png?v=999">
-
-<title>Store Discount Calculator</title>
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<!-- jsPDF Library for Thermal Receipt Export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<style>
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #000000;
-        color: #ffffff;
-        user-select: none;
-        touch-action: manipulation;
-    }
-    input, select, textarea, button {
-        font-size: 16px !important;
-        touch-action: manipulation;
-    }
-    .font-mono-nums {
-        font-variant-numeric: tabular-nums;
-    }
-    .ios-btn:active {
-        filter: brightness(130%);
-        transform: scale(0.97);
-        transition: transform 0.05s ease;
-    }
-    ::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #3a3a3c;
-        border-radius: 4px;
-    }
-</style>
-
-
-<header class="w-full flex justify-between items-center py-1.5 px-1 mb-1.5 border-b border-zinc-900">
-    <div class="flex items-center space-x-2.5">
-        <div class="w-8 h-8 rounded-xl overflow-hidden shadow-lg shadow-orange-500/20 border border-orange-500/30 bg-zinc-900 flex items-center justify-center">
-            <img src="calc icon.png?v=999" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23f97316\'/><text x=\'50\' y=\'60\' font-size=\'50\' fill=\'white\' text-anchor=\'middle\'>+</text></svg>';">
-        </div>
-        <div>
-            <h1 class="font-bold text-xs tracking-tight text-white leading-tight">Store Calculator</h1>
-        </div>
-    </div>
-    <div class="flex items-center space-x-1.5">
-        <button onclick="shareApp()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 px-2.5 rounded-full transition font-semibold flex items-center space-x-1 border border-zinc-800 shadow" title="Share App">
-            <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-            <span>Share</span>
-        </button>
-        <button onclick="toggleSettingsModal()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 p-2 rounded-full transition border border-zinc-800 shadow flex items-center justify-center" title="Manage Custom Percentages">
-            <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        </button>
-    </div>
-</header>
-
-<main class="w-full bg-zinc-950 border border-zinc-900 rounded-2xl shadow-2xl p-2.5 flex flex-col space-y-2">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Store Calc">
+    <meta name="theme-color" content="#000000">
     
-    <!-- Scrap Exchange Section at Top -->
-    <div class="bg-zinc-900/90 border border-zinc-800 rounded-xl p-2 flex flex-col space-y-2">
-        <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleScrapSection()">
-            <div class="flex items-center space-x-1.5">
-                <svg class="w-3.5 h-3.5 text-orange-400 pl-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                <div>
-                    <div class="text-[11px] font-bold text-white">Scrap Exchange Value</div>
-                    <div class="text-[9px] text-zinc-400">Aluminum & Steel deduction (-100g/handle)</div>
-                </div>
+    <link rel="icon" type="image/png" href="calc icon.png?v=999">
+    <link rel="apple-touch-icon" href="calc icon.png?v=999">
+    <link rel="apple-touch-icon-precomposed" href="calc icon.png?v=999">
+
+    <title>Store Discount Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- jsPDF Library for Thermal Receipt Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        input, select, textarea, button {
+            font-size: 16px !important;
+            touch-action: manipulation;
+        }
+        .font-mono-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        .ios-btn:active {
+            filter: brightness(130%);
+            transform: scale(0.97);
+            transition: transform 0.05s ease;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a3c;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center p-2 sm:p-3 max-w-md mx-auto">
+
+    <header class="w-full flex justify-between items-center py-1.5 px-1 mb-1.5 border-b border-zinc-900">
+        <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl overflow-hidden shadow-lg shadow-orange-500/20 border border-orange-500/30 bg-zinc-900 flex items-center justify-center">
+                <img src="calc icon.png?v=999" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23f97316\'/><text x=\'50\' y=\'60\' font-size=\'50\' fill=\'white\' text-anchor=\'middle\'>+</text></svg>';">
             </div>
-            <div class="flex items-center space-x-2">
-                <div class="text-right">
-                    <div id="live-total-exchange" class="text-orange-400 font-mono font-bold text-[11px]">₹0.00</div>
-                </div>
-                <svg id="scrap-toggle-icon" class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </div>
-        </div>
-
-        <div id="scrap-body" class="hidden flex-col space-y-2 pt-2 border-t border-zinc-800">
-            <div class="grid grid-cols-2 gap-2">
-                <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 flex flex-col justify-between space-y-1.5">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold text-zinc-200">Aluminium</span>
-                        <span class="text-[9px] bg-orange-500/15 text-orange-400 px-1 py-0.5 rounded font-mono">₹150/kg</span>
-                    </div>
-                    <div class="relative">
-                        <input type="number" inputmode="decimal" pattern="[0-9]*" id="ex-aluminum-weight" placeholder="0 wt" min="0" step="0.1" oninput="calculateExchangeValue()" class="w-full bg-zinc-900 border border-zinc-800 rounded-md text-right text-[11px] text-white font-mono font-bold py-1 pr-5 pl-1 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
-                        <span class="absolute right-1 top-1 text-[9px] text-zinc-500 font-mono">kg</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-1 border-t border-zinc-900">
-                        <span class="text-[9px] text-zinc-400">Handles (-100g)</span>
-                        <input type="number" inputmode="numeric" pattern="[0-9]*" id="ex-aluminum-handles" placeholder="0" min="0" oninput="calculateExchangeValue()" class="w-10 bg-zinc-900 border border-zinc-800 rounded text-center text-[11px] text-white font-mono font-bold py-0.5 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
-                    </div>
-                    <div class="text-right text-[9px] text-zinc-400 font-mono" id="ex-aluminum-cost">₹0.00</div>
-                </div>
-
-                <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 flex flex-col justify-between space-y-1.5">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold text-zinc-200">Steel</span>
-                        <span class="text-[9px] bg-orange-500/15 text-orange-400 px-1 py-0.5 rounded font-mono">₹50/kg</span>
-                    </div>
-                    <div class="relative">
-                        <input type="number" inputmode="decimal" pattern="[0-9]*" id="ex-steel-weight" placeholder="0 wt" min="0" step="0.1" oninput="calculateExchangeValue()" class="w-full bg-zinc-900 border border-zinc-800 rounded-md text-right text-[11px] text-white font-mono font-bold py-1 pr-5 pl-1 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
-                        <span class="absolute right-1 top-1 text-[9px] text-zinc-500 font-mono">kg</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-1 border-t border-zinc-900">
-                        <span class="text-[9px] text-zinc-400">Handles (-100g)</span>
-                        <input type="number" inputmode="numeric" pattern="[0-9]*" id="ex-steel-handles" placeholder="0" min="0" oninput="calculateExchangeValue()" class="w-10 bg-zinc-900 border border-zinc-800 rounded text-center text-[11px] text-white font-mono font-bold py-0.5 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
-                    </div>
-                    <div class="text-right text-[9px] text-zinc-400 font-mono" id="ex-steel-cost">₹0.00</div>
-                </div>
-            </div>
-
-            <div class="flex justify-end pt-0.5">
-                <button onclick="confirmClearScrap(event)" class="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-md font-semibold transition border border-zinc-700 flex items-center space-x-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    <span>Clear Scrap Inputs</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MRP Display Screen -->
-    <div class="bg-zinc-900/95 border border-zinc-800/90 rounded-xl p-2.5 flex flex-col justify-end min-h-[70px] text-right shadow-inner">
-        <div class="flex justify-between items-center mb-0.5">
-            <span id="active-disc-badge" class="text-[10px] text-orange-400 font-bold bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30 font-mono">20% OFF Active</span>
-            <span class="text-[9px] text-zinc-500 font-mono font-semibold">MRP INPUT</span>
-        </div>
-        
-        <div class="grid grid-cols-2 gap-x-2 text-xs text-zinc-400 border-b border-zinc-800 pb-1 mb-0.5">
-            <div class="flex justify-between items-center">
-                <span class="text-[9px]">Save:</span>
-                <span id="live-saved" class="text-emerald-400 font-mono font-bold text-xs">₹0.00</span>
-            </div>
-            <div class="flex justify-between items-center">
-                <span class="text-[9px]">Final:</span>
-                <span id="live-final" class="text-white font-mono font-extrabold text-xs">₹0.00</span>
-            </div>
-        </div>
-
-        <div id="mrp-display" class="text-xl sm:text-2xl font-light font-mono-nums tracking-tight text-white truncate py-0.5">0</div>
-    </div>
-
-    <!-- Discount Percentage Selectors -->
-    <div>
-        <div class="flex justify-between items-center mb-1">
-            <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Select Discount %</span>
-            <span class="text-[9px] text-zinc-500 font-medium">Saved permanently</span>
-        </div>
-        <div id="discount-buttons-grid" class="grid grid-cols-4 gap-1"></div>
-    </div>
-
-    <!-- Calculator Keypad Grid -->
-    <div class="grid grid-cols-4 gap-1">
-        <!-- Row 1 -->
-        <button onclick="clearCalculator()" class="ios-btn w-full h-11 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">C</button>
-        <button onclick="appendValue('00')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">00</button>
-        <button onclick="backspace()" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow" title="Backspace">
-            <svg class="w-4 h-4 text-zinc-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v12a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"/></svg>
-        </button>
-        <button onclick="addItem()" class="ios-btn row-span-5 h-full bg-gradient-to-br from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-black rounded-xl transition flex flex-col items-center justify-center shadow-lg shadow-orange-500/25 border border-orange-400/30 py-3">
-            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            <span class="font-black tracking-wider text-[11px]">ADD</span>
-        </button>
-
-        <!-- Row 2 -->
-        <button onclick="appendValue('7')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">7</button>
-        <button onclick="appendValue('8')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">8</button>
-        <button onclick="appendValue('9')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">9</button>
-
-        <!-- Row 3 -->
-        <button onclick="appendValue('4')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">4</button>
-        <button onclick="appendValue('5')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">5</button>
-        <button onclick="appendValue('6')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">6</button>
-
-        <!-- Row 4 -->
-        <button onclick="appendValue('1')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">1</button>
-        <button onclick="appendValue('2')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">2</button>
-        <button onclick="appendValue('3')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">3</button>
-
-        <!-- Row 5 -->
-        <button onclick="appendValue('0')" class="ios-btn col-span-2 w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">0</button>
-        <button onclick="appendValue('.')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">.</button>
-    </div>
-
-</main>
-
-<section class="w-full bg-zinc-900/95 border border-zinc-800 rounded-2xl p-2.5 mt-2 shadow-2xl flex flex-col space-y-2">
-    <div class="flex justify-between items-center text-xs text-zinc-400 border-b border-zinc-800 pb-1">
-        <span class="font-bold text-zinc-200 text-xs">Bill Summary (<span id="summary-count">0</span> items)</span>
-        <span class="text-emerald-400 font-bold text-[11px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Saved: <span id="summary-saved" class="font-mono font-black">₹0.00</span></span>
-    </div>
-
-    <div class="grid grid-cols-2 gap-2">
-        <div class="bg-zinc-950/60 p-2 rounded-xl border border-zinc-800">
-            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-mono font-bold mb-0.5">Total MRP</div>
-            <div id="summary-total-mrp" class="text-base sm:text-lg font-black font-mono-nums text-zinc-300">₹0.00</div>
-        </div>
-        <div class="bg-orange-500/10 p-2 rounded-xl border border-orange-500/30 text-right">
-            <div class="text-[9px] uppercase tracking-wider text-orange-400 font-mono font-black mb-0.5">Grand Total</div>
-            <div id="summary-grand-total" class="text-lg sm:text-xl font-black font-mono-nums text-white tracking-tight">₹0.00</div>
-        </div>
-    </div>
-
-    <div id="summary-exchange-container" class="hidden justify-between items-center bg-zinc-950 p-2 rounded-lg border border-zinc-800 text-[11px] text-zinc-400">
-        <span>Scrap Exchange Deducted:</span>
-        <span id="summary-total-exchange" class="text-orange-400 font-mono font-bold">₹0.00</span>
-    </div>
-
-    <div class="flex space-x-2 pt-0.5">
-        <button onclick="toggleBillModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 border border-zinc-700 shadow">
-            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-            <span>View Item List</span>
-        </button>
-        <button onclick="confirmReset()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-3 py-2 rounded-xl text-xs font-bold transition border border-rose-500/30 shadow">
-            Reset
-        </button>
-    </div>
-</section>
-
-<div id="bill-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
-        <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
-            <h3 class="font-bold text-base text-white flex items-center space-x-2">
-                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-                <span>Itemized Bill List</span>
-            </h3>
-            <button onclick="toggleBillModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-        
-        <div id="bill-items-list" class="flex-1 overflow-y-auto space-y-3 pr-1">
-            <div class="text-center text-zinc-500 py-12 text-sm font-medium">No items added yet.</div>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-zinc-900 flex flex-col space-y-3">
-            <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
-                <span class="text-xs uppercase font-mono text-orange-400 font-bold">Final Payable Amount</span>
-                <span id="modal-grand-total" class="text-xl font-black font-mono-nums text-white">₹0.00</span>
-            </div>
-            <div class="flex space-x-2">
-                <button onclick="downloadPDF()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition shadow-lg flex items-center justify-center space-x-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                    <span>Download Thermal Receipt PDF</span>
-                </button>
-                <button onclick="toggleBillModal()" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 px-5 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div id="confirm-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-3xl p-5 flex flex-col items-center text-center shadow-2xl space-y-4">
-        <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center text-xl font-bold border border-rose-500/30">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        </div>
-        <div>
-            <h3 id="confirm-title" class="font-bold text-base text-white mb-1">Confirm Action</h3>
-            <p id="confirm-desc" class="text-xs text-zinc-400">Are you sure you want to proceed with this action?</p>
-        </div>
-        <div class="flex space-x-2 w-full pt-2">
-            <button id="confirm-yes-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl text-xs font-bold transition">
-                Yes, Proceed
-            </button>
-            <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-2.5 rounded-xl text-xs font-bold transition border border-zinc-800">
-                Cancel
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Settings Modal -->
-<div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-zinc-950 border border-zinc-800 w-full max-w-sm rounded-3xl p-5 flex flex-col shadow-2xl">
-        <div class="flex justify-between items-center mb-4 border-b border-zinc-900 pb-3">
-            <h3 class="font-bold text-base text-white flex items-center space-x-2">
-                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                <span>Manage Custom %</span>
-            </h3>
-            <button onclick="toggleSettingsModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-
-        <div class="space-y-4">
-            <div class="flex space-x-2">
-                <input type="number" inputmode="numeric" pattern="[0-9]*" id="new-pct-input" placeholder="e.g. 15 or 30" min="1" max="100" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-white font-bold text-base focus:outline-none focus:border-orange-500 placeholder-zinc-500">
-                <button onclick="addNewPercentage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-2xl font-bold text-sm transition shadow-lg">
-                    Add %
-                </button>
-            </div>
-
             <div>
-                <div class="text-xs uppercase font-mono text-zinc-400 font-bold mb-2">Saved Percentages</div>
-                <div id="saved-percentages-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-1"></div>
+                <h1 onclick="editStoreName()" class="font-bold text-xs tracking-tight text-white leading-tight hover:text-orange-400 cursor-pointer transition flex items-center space-x-1 group" title="Click to edit store name">
+                    <span id="store-name-text">Store Calculator</span>
+                    <svg class="w-3 h-3 text-zinc-500 group-hover:text-orange-400 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </h1>
+            </div>
+        </div>
+        <div class="flex items-center space-x-1.5">
+            <button onclick="shareApp()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 px-2.5 rounded-full transition font-semibold flex items-center space-x-1 border border-zinc-800 shadow" title="Share App">
+                <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                <span>Share</span>
+            </button>
+            <button onclick="toggleSettingsModal()" class="text-[11px] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 p-2 rounded-full transition border border-zinc-800 shadow flex items-center justify-center" title="Manage Custom Percentages">
+                <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="w-full bg-zinc-950 border border-zinc-900 rounded-2xl shadow-2xl p-2.5 flex flex-col space-y-2">
+        
+        <!-- Scrap Exchange Section at Top -->
+        <div class="bg-zinc-900/90 border border-zinc-800 rounded-xl p-2 flex flex-col space-y-2">
+            <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleScrapSection()">
+                <div class="flex items-center space-x-1.5">
+                    <svg class="w-3.5 h-3.5 text-orange-400 pl-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <div>
+                        <div class="text-[11px] font-bold text-white">Scrap Exchange Value</div>
+                        <div class="text-[9px] text-zinc-400">Aluminum/Steel weights or Direct Amount</div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="text-right">
+                        <div id="live-total-exchange" class="text-orange-400 font-mono font-bold text-[11px]">₹0.00</div>
+                    </div>
+                    <svg id="scrap-toggle-icon" class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+            </div>
+
+            <div id="scrap-body" class="hidden flex-col space-y-2 pt-2 border-t border-zinc-800">
+                <!-- Direct Scrap Amount Input -->
+                <div class="bg-zinc-950 p-2 rounded-lg border border-orange-500/30 flex items-center justify-between">
+                    <div>
+                        <div class="text-[10px] font-bold text-orange-400">Direct Scrap Amount</div>
+                        <div class="text-[9px] text-zinc-400">Override weights with flat amount</div>
+                    </div>
+                    <div class="relative w-28">
+                        <input type="number" inputmode="decimal" pattern="[0-9]*" id="ex-direct-amount" placeholder="₹ 0.00" min="0" step="1" oninput="calculateExchangeValue()" class="w-full bg-zinc-900 border border-zinc-700 rounded-md text-right text-xs text-orange-400 font-mono font-bold py-1 pr-1 pl-5 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+                        <span class="absolute left-1.5 top-1 text-xs text-orange-400 font-mono">₹</span>
+                    </div>
+                </div>
+
+                <div class="text-[9px] uppercase tracking-wider text-zinc-500 font-bold px-0.5">Or Calculate by Weight:</div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 flex flex-col justify-between space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-zinc-200">Aluminium</span>
+                            <span class="text-[9px] bg-orange-500/15 text-orange-400 px-1 py-0.5 rounded font-mono">₹150/kg</span>
+                        </div>
+                        <div class="relative">
+                            <input type="number" inputmode="decimal" pattern="[0-9]*" id="ex-aluminum-weight" placeholder="0 wt" min="0" step="0.1" oninput="calculateExchangeValue()" class="w-full bg-zinc-900 border border-zinc-800 rounded-md text-right text-[11px] text-white font-mono font-bold py-1 pr-5 pl-1 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+                            <span class="absolute right-1 top-1 text-[9px] text-zinc-500 font-mono">kg</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-zinc-900">
+                            <span class="text-[9px] text-zinc-400">Handles (-100g)</span>
+                            <input type="number" inputmode="numeric" pattern="[0-9]*" id="ex-aluminum-handles" placeholder="0" min="0" oninput="calculateExchangeValue()" class="w-10 bg-zinc-900 border border-zinc-800 rounded text-center text-[11px] text-white font-mono font-bold py-0.5 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+                        </div>
+                        <div class="text-right text-[9px] text-zinc-400 font-mono" id="ex-aluminum-cost">₹0.00</div>
+                    </div>
+
+                    <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 flex flex-col justify-between space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-zinc-200">Steel</span>
+                            <span class="text-[9px] bg-orange-500/15 text-orange-400 px-1 py-0.5 rounded font-mono">₹50/kg</span>
+                        </div>
+                        <div class="relative">
+                            <input type="number" inputmode="decimal" pattern="[0-9]*" id="ex-steel-weight" placeholder="0 wt" min="0" step="0.1" oninput="calculateExchangeValue()" class="w-full bg-zinc-900 border border-zinc-800 rounded-md text-right text-[11px] text-white font-mono font-bold py-1 pr-5 pl-1 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+                            <span class="absolute right-1 top-1 text-[9px] text-zinc-500 font-mono">kg</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-zinc-900">
+                            <span class="text-[9px] text-zinc-400">Handles (-100g)</span>
+                            <input type="number" inputmode="numeric" pattern="[0-9]*" id="ex-steel-handles" placeholder="0" min="0" oninput="calculateExchangeValue()" class="w-10 bg-zinc-900 border border-zinc-800 rounded text-center text-[11px] text-white font-mono font-bold py-0.5 focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+                        </div>
+                        <div class="text-right text-[9px] text-zinc-400 font-mono" id="ex-steel-cost">₹0.00</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-0.5">
+                    <button onclick="confirmClearScrap(event)" class="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-md font-semibold transition border border-zinc-700 flex items-center space-x-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <span>Clear Scrap Inputs</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="mt-6 pt-3 border-t border-zinc-900">
-            <button onclick="toggleSettingsModal()" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
-                Done / Close
+        <!-- MRP Display Screen -->
+        <div class="bg-zinc-900/95 border border-zinc-800/90 rounded-xl p-2.5 flex flex-col justify-end min-h-[70px] text-right shadow-inner">
+            <div class="flex justify-between items-center mb-0.5">
+                <span id="active-disc-badge" class="text-[10px] text-orange-400 font-bold bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30 font-mono">20% OFF Active</span>
+                <span class="text-[9px] text-zinc-500 font-mono font-semibold">MRP INPUT</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-x-2 text-xs text-zinc-400 border-b border-zinc-800 pb-1 mb-0.5">
+                <div class="flex justify-between items-center">
+                    <span class="text-[9px]">Save:</span>
+                    <span id="live-saved" class="text-emerald-400 font-mono font-bold text-xs">₹0.00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[9px]">Final:</span>
+                    <span id="live-final" class="text-white font-mono font-extrabold text-xs">₹0.00</span>
+                </div>
+            </div>
+
+            <div id="mrp-display" class="text-xl sm:text-2xl font-light font-mono-nums tracking-tight text-white truncate py-0.5">0</div>
+        </div>
+
+        <!-- Discount Percentage Selectors -->
+        <div>
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Select Discount %</span>
+                <span class="text-[9px] text-zinc-500 font-medium">Saved permanently</span>
+            </div>
+            <div id="discount-buttons-grid" class="grid grid-cols-4 gap-1"></div>
+        </div>
+
+        <!-- Calculator Keypad Grid -->
+        <div class="grid grid-cols-4 gap-1">
+            <!-- Row 1 -->
+            <button onclick="clearCalculator()" class="ios-btn w-full h-11 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">C</button>
+            <button onclick="appendValue('00')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow">00</button>
+            <button onclick="backspace()" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm rounded-xl transition flex items-center justify-center shadow" title="Backspace">
+                <svg class="w-4 h-4 text-zinc-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v12a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"/></svg>
+            </button>
+            <button onclick="addItem()" class="ios-btn row-span-5 h-full bg-gradient-to-br from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-black rounded-xl transition flex flex-col items-center justify-center shadow-lg shadow-orange-500/25 border border-orange-400/30 py-3">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                <span class="font-black tracking-wider text-[11px]">ADD</span>
+            </button>
+
+            <!-- Row 2 -->
+            <button onclick="appendValue('7')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">7</button>
+            <button onclick="appendValue('8')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">8</button>
+            <button onclick="appendValue('9')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">9</button>
+
+            <!-- Row 3 -->
+            <button onclick="appendValue('4')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">4</button>
+            <button onclick="appendValue('5')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">5</button>
+            <button onclick="appendValue('6')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">6</button>
+
+            <!-- Row 4 -->
+            <button onclick="appendValue('1')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">1</button>
+            <button onclick="appendValue('2')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">2</button>
+            <button onclick="appendValue('3')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">3</button>
+
+            <!-- Row 5 -->
+            <button onclick="appendValue('0')" class="ios-btn col-span-2 w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">0</button>
+            <button onclick="appendValue('.')" class="ios-btn w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white font-extrabold text-lg rounded-xl transition flex items-center justify-center shadow">.</button>
+        </div>
+
+    </main>
+
+    <section class="w-full bg-zinc-900/95 border border-zinc-800 rounded-2xl p-2.5 mt-2 shadow-2xl flex flex-col space-y-2">
+        <div class="flex justify-between items-center text-xs text-zinc-400 border-b border-zinc-800 pb-1">
+            <span class="font-bold text-zinc-200 text-xs">Bill Summary (<span id="summary-count">0</span> items)</span>
+            <span class="text-emerald-400 font-bold text-[11px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Saved: <span id="summary-saved" class="font-mono font-black">₹0.00</span></span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+            <div class="bg-zinc-950/60 p-2 rounded-xl border border-zinc-800">
+                <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-mono font-bold mb-0.5">Total MRP</div>
+                <div id="summary-total-mrp" class="text-base sm:text-lg font-black font-mono-nums text-zinc-300">₹0.00</div>
+            </div>
+            <div class="bg-orange-500/10 p-2 rounded-xl border border-orange-500/30 text-right">
+                <div class="text-[9px] uppercase tracking-wider text-orange-400 font-mono font-black mb-0.5">Grand Total</div>
+                <div id="summary-grand-total" class="text-lg sm:text-xl font-black font-mono-nums text-white tracking-tight">₹0.00</div>
+            </div>
+        </div>
+
+        <div id="summary-exchange-container" class="hidden justify-between items-center bg-zinc-950 p-2 rounded-lg border border-zinc-800 text-[11px] text-zinc-400">
+            <span>Scrap Exchange Deducted:</span>
+            <span id="summary-total-exchange" class="text-orange-400 font-mono font-bold">₹0.00</span>
+        </div>
+
+        <div class="flex space-x-2 pt-0.5">
+            <button onclick="toggleBillModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 border border-zinc-700 shadow">
+                <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                <span>View Item List</span>
+            </button>
+            <button onclick="confirmReset()" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 px-3 py-2 rounded-xl text-xs font-bold transition border border-rose-500/30 shadow">
+                Reset
             </button>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- Toast Notification -->
-<div id="toast" class="fixed bottom-6 bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl border border-zinc-800 transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
-    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-    <span id="toast-msg">Saved</span>
-</div>
-
-<script>
-    let currentMrpInput = "0";
-    let currentDiscountPct = 20; 
-    
-    let permanentPercentages = JSON.parse(localStorage.getItem('github_store_custom_pcts') || '[20, 40]');
-    let billItems = JSON.parse(localStorage.getItem('github_store_items') || '[]');
-    let savedScrapData = JSON.parse(localStorage.getItem('github_store_scrap') || '{"alWt":"","alH":"","stWt":"","stH":"","active":true}');
-
-    const mrpDisplay = document.getElementById('mrp-display');
-    const activeDiscBadge = document.getElementById('active-disc-badge');
-    const liveSaved = document.getElementById('live-saved');
-    const liveFinal = document.getElementById('live-final');
-    
-    const exAluminumWeight = document.getElementById('ex-aluminum-weight');
-    const exAluminumHandles = document.getElementById('ex-aluminum-handles');
-    const exAluminumCost = document.getElementById('ex-aluminum-cost');
-    const exSteelWeight = document.getElementById('ex-steel-weight');
-    const exSteelHandles = document.getElementById('ex-steel-handles');
-    const exSteelCost = document.getElementById('ex-steel-cost');
-    const liveTotalExchange = document.getElementById('live-total-exchange');
-
-    const discountButtonsGrid = document.getElementById('discount-buttons-grid');
-    const savedPercentagesList = document.getElementById('saved-percentages-list');
-    const newPctInput = document.getElementById('new-pct-input');
-    
-    const summaryCount = document.getElementById('summary-count');
-    const summaryTotalMrp = document.getElementById('summary-total-mrp');
-    const summarySaved = document.getElementById('summary-saved');
-    const summaryGrandTotal = document.getElementById('summary-grand-total');
-    const summaryExchangeContainer = document.getElementById('summary-exchange-container');
-    const summaryTotalExchange = document.getElementById('summary-total-exchange');
-    
-    const billModal = document.getElementById('bill-modal');
-    const billItemsList = document.getElementById('bill-items-list');
-    const modalGrandTotal = document.getElementById('modal-grand-total');
-    
-    const settingsModal = document.getElementById('settings-modal');
-    const confirmModal = document.getElementById('confirm-modal');
-    const confirmTitle = document.getElementById('confirm-title');
-    const confirmDesc = document.getElementById('confirm-desc');
-    const confirmYesBtn = document.getElementById('confirm-yes-btn');
-
-    const scrapBody = document.getElementById('scrap-body');
-    const scrapToggleIcon = document.getElementById('scrap-toggle-icon');
-
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toast-msg');
-
-    window.onload = function() {
-        if(exAluminumWeight) exAluminumWeight.value = savedScrapData.alWt || "";
-        if(exAluminumHandles) exAluminumHandles.value = savedScrapData.alH || "";
-        if(exSteelWeight) exSteelWeight.value = savedScrapData.stWt || "";
-        if(exSteelHandles) exSteelHandles.value = savedScrapData.stH || "";
-        if(savedScrapData.active === undefined) savedScrapData.active = true;
-
-        renderDiscountButtons();
-        renderSettingsPercentages();
-        updateLivePreview();
-        updateBillSummary();
-    };
-
-    function renderDiscountButtons() {
-        let html = "";
-        permanentPercentages.forEach(pct => {
-            const isActive = (currentDiscountPct === pct);
-            const btnClass = isActive 
-                ? "py-1.5 bg-orange-500/20 text-orange-400 border border-orange-500/50 text-xs font-extrabold rounded-xl transition shadow flex items-center justify-center font-mono-nums"
-                : "py-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-bold rounded-xl border border-zinc-800 transition flex items-center justify-center font-mono-nums";
+    <div id="bill-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-3 border-b border-zinc-900 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    <span>Itemized Bill List</span>
+                </h3>
+                <button onclick="toggleBillModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
             
-            html += `<button onclick="setDiscount(${pct})" class="${btnClass}">${pct}%</button>`;
-        });
-        discountButtonsGrid.innerHTML = html;
-    }
+            <div id="bill-items-list" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                <div class="text-center text-zinc-500 py-12 text-sm font-medium">No items added yet.</div>
+            </div>
 
-    function renderSettingsPercentages() {
-        let html = "";
-        permanentPercentages.forEach((pct, index) => {
-            html += `
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 flex items-center justify-between text-xs font-bold text-white font-mono-nums">
-                    <span>${pct}% OFF</span>
-                    ${permanentPercentages.length > 1 ? `<button onclick="removePercentage(${index})" class="text-zinc-500 hover:text-rose-400 ml-3"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
+            <div class="mt-4 pt-3 border-t border-zinc-900 flex flex-col space-y-3">
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
+                    <span class="text-xs uppercase font-mono text-orange-400 font-bold">Final Payable Amount</span>
+                    <span id="modal-grand-total" class="text-xl font-black font-mono-nums text-white">₹0.00</span>
                 </div>
-            `;
-        });
-        savedPercentagesList.innerHTML = html;
-    }
+                <div class="flex space-x-2">
+                    <button onclick="downloadPDF()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl text-xs font-bold transition shadow-lg flex items-center justify-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        <span>Download Thermal Receipt PDF</span>
+                    </button>
+                    <button onclick="toggleBillModal()" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 px-5 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function addNewPercentage() {
-        const val = parseInt(newPctInput.value);
-        if (isNaN(val) || val <= 0 || val > 100) {
-            showToast("Enter a valid percentage (1-100)!");
-            return;
-        }
-        if (permanentPercentages.includes(val)) {
-            showToast("Percentage already exists!");
-            return;
-        }
+    <!-- Edit Store Title Modal -->
+    <div id="store-name-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-3xl p-5 flex flex-col shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-zinc-900 pb-2">
+                <h3 class="font-bold text-sm text-white flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    <span>Edit Store Name</span>
+                </h3>
+                <button onclick="toggleStoreNameModal()" class="text-zinc-400 hover:text-white p-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div>
+                <label class="text-[10px] uppercase font-mono text-zinc-400 font-bold block mb-1">Custom Shop / Store Title</label>
+                <input type="text" id="store-name-input" placeholder="e.g. City Hardware Store" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-orange-500 placeholder-zinc-600">
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button onclick="saveStoreName()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl text-xs font-bold transition shadow-lg">
+                    Save Name
+                </button>
+                <button onclick="toggleStoreNameModal()" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-2.5 rounded-xl text-xs font-bold transition border border-zinc-800">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
 
-        permanentPercentages.push(val);
-        permanentPercentages.sort((a, b) => a - b);
-        localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-3xl p-5 flex flex-col items-center text-center shadow-2xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center text-xl font-bold border border-rose-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <div>
+                <h3 id="confirm-title" class="font-bold text-base text-white mb-1">Confirm Action</h3>
+                <p id="confirm-desc" class="text-xs text-zinc-400">Are you sure you want to proceed with this action?</p>
+            </div>
+            <div class="flex space-x-2 w-full pt-2">
+                <button id="confirm-yes-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                    Yes, Proceed
+                </button>
+                <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-2.5 rounded-xl text-xs font-bold transition border border-zinc-800">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-sm rounded-3xl p-5 flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-zinc-900 pb-3">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                    <span>Manage Custom %</span>
+                </h3>
+                <button onclick="toggleSettingsModal()" class="text-zinc-400 hover:text-white p-2 text-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex space-x-2">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="new-pct-input" placeholder="e.g. 15 or 30" min="1" max="100" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-white font-bold text-base focus:outline-none focus:border-orange-500 placeholder-zinc-500">
+                    <button onclick="addNewPercentage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-2xl font-bold text-sm transition shadow-lg">
+                        Add %
+                    </button>
+                </div>
+
+                <div>
+                    <div class="text-xs uppercase font-mono text-zinc-400 font-bold mb-2">Saved Percentages</div>
+                    <div id="saved-percentages-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-1"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-3 border-t border-zinc-900">
+                <button onclick="toggleSettingsModal()" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 py-3 rounded-2xl text-xs font-bold transition border border-zinc-800">
+                    Done / Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl border border-zinc-800 transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span id="toast-msg">Saved</span>
+    </div>
+
+    <script>
+        let currentMrpInput = "0";
+        let currentDiscountPct = 20; 
         
-        newPctInput.value = "";
-        renderDiscountButtons();
-        renderSettingsPercentages();
-        showToast(`Added ${val}% discount!`);
-    }
+        let customStoreName = localStorage.getItem('github_store_custom_name') || 'Store Calculator';
+        let permanentPercentages = JSON.parse(localStorage.getItem('github_store_custom_pcts') || '[20, 40]');
+        let billItems = JSON.parse(localStorage.getItem('github_store_items') || '[]');
+        let savedScrapData = JSON.parse(localStorage.getItem('github_store_scrap') || '{"directAmt":"","alWt":"","alH":"","stWt":"","stH":"","active":true}');
 
-    function removePercentage(index) {
-        const removed = permanentPercentages.splice(index, 1)[0];
-        if (currentDiscountPct === removed) {
-            currentDiscountPct = permanentPercentages[0] || 20;
+        const storeNameText = document.getElementById('store-name-text');
+        const storeNameModal = document.getElementById('store-name-modal');
+        const storeNameInput = document.getElementById('store-name-input');
+
+        const mrpDisplay = document.getElementById('mrp-display');
+        const activeDiscBadge = document.getElementById('active-disc-badge');
+        const liveSaved = document.getElementById('live-saved');
+        const liveFinal = document.getElementById('live-final');
+        
+        const exDirectAmount = document.getElementById('ex-direct-amount');
+        const exAluminumWeight = document.getElementById('ex-aluminum-weight');
+        const exAluminumHandles = document.getElementById('ex-aluminum-handles');
+        const exAluminumCost = document.getElementById('ex-aluminum-cost');
+        const exSteelWeight = document.getElementById('ex-steel-weight');
+        const exSteelHandles = document.getElementById('ex-steel-handles');
+        const exSteelCost = document.getElementById('ex-steel-cost');
+        const liveTotalExchange = document.getElementById('live-total-exchange');
+
+        const discountButtonsGrid = document.getElementById('discount-buttons-grid');
+        const savedPercentagesList = document.getElementById('saved-percentages-list');
+        const newPctInput = document.getElementById('new-pct-input');
+        
+        const summaryCount = document.getElementById('summary-count');
+        const summaryTotalMrp = document.getElementById('summary-total-mrp');
+        const summarySaved = document.getElementById('summary-saved');
+        const summaryGrandTotal = document.getElementById('summary-grand-total');
+        const summaryExchangeContainer = document.getElementById('summary-exchange-container');
+        const summaryTotalExchange = document.getElementById('summary-total-exchange');
+        
+        const billModal = document.getElementById('bill-modal');
+        const billItemsList = document.getElementById('bill-items-list');
+        const modalGrandTotal = document.getElementById('modal-grand-total');
+        
+        const settingsModal = document.getElementById('settings-modal');
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmDesc = document.getElementById('confirm-desc');
+        const confirmYesBtn = document.getElementById('confirm-yes-btn');
+
+        const scrapBody = document.getElementById('scrap-body');
+        const scrapToggleIcon = document.getElementById('scrap-toggle-icon');
+
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-msg');
+
+        window.onload = function() {
+            if(storeNameText) storeNameText.textContent = customStoreName;
+            if(exDirectAmount) exDirectAmount.value = savedScrapData.directAmt || "";
+            if(exAluminumWeight) exAluminumWeight.value = savedScrapData.alWt || "";
+            if(exAluminumHandles) exAluminumHandles.value = savedScrapData.alH || "";
+            if(exSteelWeight) exSteelWeight.value = savedScrapData.stWt || "";
+            if(exSteelHandles) exSteelHandles.value = savedScrapData.stH || "";
+            if(savedScrapData.active === undefined) savedScrapData.active = true;
+
+            renderDiscountButtons();
+            renderSettingsPercentages();
+            updateLivePreview();
+            updateBillSummary();
+        };
+
+        function editStoreName() {
+            if (storeNameInput) storeNameInput.value = customStoreName;
+            if (storeNameModal) storeNameModal.classList.remove('hidden');
         }
-        localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
-        renderDiscountButtons();
-        renderSettingsPercentages();
-        updateLivePreview();
-        showToast(`Removed ${removed}% discount.`);
-    }
 
-    function appendValue(val) {
-        if (currentMrpInput === "0" && val !== ".") {
-            currentMrpInput = val;
-        } else {
-            if (val === "." && currentMrpInput.includes(".")) return;
-            if (currentMrpInput.length >= 10) return;
-            currentMrpInput += val;
+        function toggleStoreNameModal() {
+            if (storeNameModal) storeNameModal.classList.toggle('hidden');
         }
-        updateLivePreview();
-    }
 
-    function backspace() {
-        if (currentMrpInput.length > 1) {
-            currentMrpInput = currentMrpInput.slice(0, -1);
-        } else {
-            currentMrpInput = "0";
-        }
-        updateLivePreview();
-    }
-
-    function clearCalculator() {
-        currentMrpInput = "0";
-        updateLivePreview();
-        showToast("Calculator cleared.");
-    }
-
-    function confirmClearScrap(e) {
-        if (e) e.stopPropagation();
-        openConfirmModal(
-            "Clear Scrap Inputs",
-            "Are you sure you want to reset all scrap exchange weight and handle counts?",
-            () => {
-                clearScrapValues();
-                showToast("Scrap input values cleared.");
+        function saveStoreName() {
+            const val = storeNameInput ? storeNameInput.value.trim() : '';
+            if (!val) {
+                showToast("Store name cannot be empty!");
+                return;
             }
-        );
-    }
-
-    function clearScrapValues() {
-        if (exAluminumWeight) exAluminumWeight.value = "";
-        if (exAluminumHandles) exAluminumHandles.value = "";
-        if (exSteelWeight) exSteelWeight.value = "";
-        if (exSteelHandles) exSteelHandles.value = "";
-        savedScrapData.alWt = "";
-        savedScrapData.alH = "";
-        savedScrapData.stWt = "";
-        savedScrapData.stH = "";
-        savedScrapData.active = true;
-        saveScrapStorage();
-        updateLivePreview();
-        updateBillSummary();
-    }
-
-    function confirmDeleteScrap() {
-        openConfirmModal(
-            "Delete Scrap Exchange",
-            "Are you sure you want to remove scrap exchange inputs completely?",
-            () => {
-                clearScrapValues();
-                showToast("Scrap exchange deleted.");
-            }
-        );
-    }
-
-    function saveScrapStorage() {
-        savedScrapData.alWt = exAluminumWeight ? exAluminumWeight.value : "";
-        savedScrapData.alH = exAluminumHandles ? exAluminumHandles.value : "";
-        savedScrapData.stWt = exSteelWeight ? exSteelWeight.value : "";
-        savedScrapData.stH = exSteelHandles ? exSteelHandles.value : "";
-        localStorage.setItem('github_store_scrap', JSON.stringify(savedScrapData));
-    }
-
-    function toggleScrapSection() {
-        const isHidden = scrapBody.classList.contains('hidden');
-        if (isHidden) {
-            scrapBody.classList.remove('hidden');
-            scrapBody.classList.add('flex');
-            scrapToggleIcon.classList.add('rotate-180');
-        } else {
-            scrapBody.classList.add('hidden');
-            scrapBody.classList.remove('flex');
-            scrapToggleIcon.classList.remove('rotate-180');
+            customStoreName = val;
+            localStorage.setItem('github_store_custom_name', customStoreName);
+            if (storeNameText) storeNameText.textContent = customStoreName;
+            toggleStoreNameModal();
+            showToast("Store name updated!");
         }
-    }
 
-    function toggleScrapActive() {
-        savedScrapData.active = savedScrapData.active === false ? true : false;
-        saveScrapStorage();
-        updateBillSummary();
-    }
+        function renderDiscountButtons() {
+            let html = "";
+            permanentPercentages.forEach(pct => {
+                const isActive = (currentDiscountPct === pct);
+                const btnClass = isActive 
+                    ? "py-1.5 bg-orange-500/20 text-orange-400 border border-orange-500/50 text-xs font-extrabold rounded-xl transition shadow flex items-center justify-center font-mono-nums"
+                    : "py-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-bold rounded-xl border border-zinc-800 transition flex items-center justify-center font-mono-nums";
+                
+                html += `<button onclick="setDiscount(${pct})" class="${btnClass}">${pct}%</button>`;
+            });
+            discountButtonsGrid.innerHTML = html;
+        }
 
-    function confirmReset() {
-        openConfirmModal(
-            "Reset All Data",
-            "Are you sure you want to reset all bill items and scrap records? This action cannot be undone.",
-            () => {
+        function renderSettingsPercentages() {
+            let html = "";
+            permanentPercentages.forEach((pct, index) => {
+                html += `
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 flex items-center justify-between text-xs font-bold text-white font-mono-nums">
+                        <span>${pct}% OFF</span>
+                        ${permanentPercentages.length > 1 ? `<button onclick="removePercentage(${index})" class="text-zinc-500 hover:text-rose-400 ml-3"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
+                    </div>
+                `;
+            });
+            savedPercentagesList.innerHTML = html;
+        }
+
+        function addNewPercentage() {
+            const val = parseInt(newPctInput.value);
+            if (isNaN(val) || val <= 0 || val > 100) {
+                showToast("Enter a valid percentage (1-100)!");
+                return;
+            }
+            if (permanentPercentages.includes(val)) {
+                showToast("Percentage already exists!");
+                return;
+            }
+
+            permanentPercentages.push(val);
+            permanentPercentages.sort((a, b) => a - b);
+            localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
+            
+            newPctInput.value = "";
+            renderDiscountButtons();
+            renderSettingsPercentages();
+            showToast(`Added ${val}% discount!`);
+        }
+
+        function removePercentage(index) {
+            const removed = permanentPercentages.splice(index, 1)[0];
+            if (currentDiscountPct === removed) {
+                currentDiscountPct = permanentPercentages[0] || 20;
+            }
+            localStorage.setItem('github_store_custom_pcts', JSON.stringify(permanentPercentages));
+            renderDiscountButtons();
+            renderSettingsPercentages();
+            updateLivePreview();
+            showToast(`Removed ${removed}% discount.`);
+        }
+
+        function appendValue(val) {
+            if (currentMrpInput === "0" && val !== ".") {
+                currentMrpInput = val;
+            } else {
+                if (val === "." && currentMrpInput.includes(".")) return;
+                if (currentMrpInput.length >= 10) return;
+                currentMrpInput += val;
+            }
+            updateLivePreview();
+        }
+
+        function backspace() {
+            if (currentMrpInput.length > 1) {
+                currentMrpInput = currentMrpInput.slice(0, -1);
+            } else {
                 currentMrpInput = "0";
-                clearScrapValues();
-                billItems = [];
-                localStorage.removeItem('github_store_items');
-                localStorage.removeItem('github_store_scrap');
-                updateLivePreview();
-                updateBillSummary();
-                showToast("All data reset completely.");
             }
-        );
-    }
-
-    function setDiscount(pct) {
-        currentDiscountPct = pct;
-        activeDiscBadge.textContent = `${pct}% OFF Active`;
-        renderDiscountButtons();
-        updateLivePreview();
-    }
-
-    function updateLivePreview() {
-        mrpDisplay.textContent = currentMrpInput;
-        const mrp = parseFloat(currentMrpInput) || 0;
-        const saved = mrp * (currentDiscountPct / 100);
-        let final = mrp - saved;
-        if (final < 0) final = 0;
-
-        liveSaved.textContent = formatCurrency(saved);
-        liveFinal.textContent = formatCurrency(final);
-        getCurrentExchangeTotal();
-        updateBillSummary();
-    }
-
-    function getCurrentExchangeValuesObj() {
-        const alWt = parseFloat(exAluminumWeight.value) || 0;
-        const alHCount = parseFloat(exAluminumHandles.value) || 0;
-        const stWt = parseFloat(exSteelWeight.value) || 0;
-        const stHCount = parseFloat(exSteelHandles.value) || 0;
-
-        const alNetWt = Math.max(0, alWt - (alHCount * 0.1));
-        const alCost = alNetWt * 150;
-
-        const stNetWt = Math.max(0, stWt - (stHCount * 0.1));
-        const stCost = stNetWt * 50;
-
-        if (exAluminumCost) exAluminumCost.textContent = formatCurrency(alCost) + (alHCount > 0 ? ` (-${(alHCount*0.1).toFixed(1)}kg)` : '');
-        if (exSteelCost) exSteelCost.textContent = formatCurrency(stCost) + (stHCount > 0 ? ` (-${(stHCount*0.1).toFixed(1)}kg)` : '');
-
-        let details = [];
-        if (alWt > 0) details.push(`Al: ${alWt}kg (${alHCount}h)`);
-        if (stWt > 0) details.push(`St: ${stWt}kg (${stHCount}h)`);
-
-        const totalEx = alCost + stCost;
-        if (liveTotalExchange) liveTotalExchange.textContent = formatCurrency(totalEx);
-
-        return {
-            amount: totalEx,
-            details: details.join(' | ')
-        };
-    }
-
-    function getCurrentExchangeTotal() {
-        const exObj = getCurrentExchangeValuesObj();
-        return exObj.amount;
-    }
-
-    function calculateExchangeValue() {
-        saveScrapStorage();
-        updateLivePreview();
-    }
-
-    function addItem() {
-        const mrp = parseFloat(currentMrpInput) || 0;
-        if (mrp <= 0) {
-            showToast("Enter an MRP greater than 0!");
-            return;
+            updateLivePreview();
         }
 
-        const saved = mrp * (currentDiscountPct / 100);
-        const final = Math.max(0, mrp - saved);
+        function clearCalculator() {
+            currentMrpInput = "0";
+            updateLivePreview();
+            showToast("Calculator cleared.");
+        }
 
-        const newItem = {
-            id: Date.now(),
-            type: 'product',
-            mrp: mrp,
-            discountPct: currentDiscountPct,
-            saved: saved,
-            final: final,
-            active: true
-        };
+        function confirmClearScrap(e) {
+            if (e) e.stopPropagation();
+            openConfirmModal(
+                "Clear Scrap Inputs",
+                "Are you sure you want to reset all scrap exchange direct amounts, weights, and handle counts?",
+                () => {
+                    clearScrapValues();
+                    showToast("Scrap input values cleared.");
+                }
+            );
+        }
 
-        billItems.push(newItem);
-        saveStorage();
-        
-        currentMrpInput = "0";
-        updateLivePreview();
-        updateBillSummary();
-        showToast(`Added MRP ₹${mrp} (${currentDiscountPct}%)`);
-    }
-
-    function toggleItemActive(id) {
-        const item = billItems.find(i => i.id === id);
-        if (item) {
-            item.active = item.active === false ? true : false;
-            saveStorage();
+        function clearScrapValues() {
+            if (exDirectAmount) exDirectAmount.value = "";
+            if (exAluminumWeight) exAluminumWeight.value = "";
+            if (exAluminumHandles) exAluminumHandles.value = "";
+            if (exSteelWeight) exSteelWeight.value = "";
+            if (exSteelHandles) exSteelHandles.value = "";
+            savedScrapData.directAmt = "";
+            savedScrapData.alWt = "";
+            savedScrapData.alH = "";
+            savedScrapData.stWt = "";
+            savedScrapData.stH = "";
+            savedScrapData.active = true;
+            saveScrapStorage();
+            updateLivePreview();
             updateBillSummary();
         }
-    }
 
-    function confirmRemoveItem(id) {
-        openConfirmModal(
-            "Delete Item",
-            "Are you sure you want to remove this item from the bill?",
-            () => {
-                billItems = billItems.filter(item => item.id !== id);
+        function confirmDeleteScrap() {
+            openConfirmModal(
+                "Delete Scrap Exchange",
+                "Are you sure you want to remove scrap exchange inputs completely?",
+                () => {
+                    clearScrapValues();
+                    showToast("Scrap exchange deleted.");
+                }
+            );
+        }
+
+        function saveScrapStorage() {
+            savedScrapData.directAmt = exDirectAmount ? exDirectAmount.value : "";
+            savedScrapData.alWt = exAluminumWeight ? exAluminumWeight.value : "";
+            savedScrapData.alH = exAluminumHandles ? exAluminumHandles.value : "";
+            savedScrapData.stWt = exSteelWeight ? exSteelWeight.value : "";
+            savedScrapData.stH = exSteelHandles ? exSteelHandles.value : "";
+            localStorage.setItem('github_store_scrap', JSON.stringify(savedScrapData));
+        }
+
+        function toggleScrapSection() {
+            const isHidden = scrapBody.classList.contains('hidden');
+            if (isHidden) {
+                scrapBody.classList.remove('hidden');
+                scrapBody.classList.add('flex');
+                scrapToggleIcon.classList.add('rotate-180');
+            } else {
+                scrapBody.classList.add('hidden');
+                scrapBody.classList.remove('flex');
+                scrapToggleIcon.classList.remove('rotate-180');
+            }
+        }
+
+        function toggleScrapActive() {
+            savedScrapData.active = savedScrapData.active === false ? true : false;
+            saveScrapStorage();
+            updateBillSummary();
+        }
+
+        function confirmReset() {
+            openConfirmModal(
+                "Reset All Data",
+                "Are you sure you want to reset all bill items and scrap records? This action cannot be undone.",
+                () => {
+                    currentMrpInput = "0";
+                    clearScrapValues();
+                    billItems = [];
+                    localStorage.removeItem('github_store_items');
+                    localStorage.removeItem('github_store_scrap');
+                    updateLivePreview();
+                    updateBillSummary();
+                    showToast("All data reset completely.");
+                }
+            );
+        }
+
+        function setDiscount(pct) {
+            currentDiscountPct = pct;
+            activeDiscBadge.textContent = `${pct}% OFF Active`;
+            renderDiscountButtons();
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            mrpDisplay.textContent = currentMrpInput;
+            const mrp = parseFloat(currentMrpInput) || 0;
+            const saved = mrp * (currentDiscountPct / 100);
+            let final = mrp - saved;
+            if (final < 0) final = 0;
+
+            liveSaved.textContent = formatCurrency(saved);
+            liveFinal.textContent = formatCurrency(final);
+            getCurrentExchangeTotal();
+            updateBillSummary();
+        }
+
+        function getCurrentExchangeValuesObj() {
+            const directAmt = parseFloat(exDirectAmount.value);
+            if (!isNaN(directAmt) && directAmt > 0) {
+                if (exAluminumCost) exAluminumCost.textContent = '₹0.00';
+                if (exSteelCost) exSteelCost.textContent = '₹0.00';
+                if (liveTotalExchange) liveTotalExchange.textContent = formatCurrency(directAmt);
+                return {
+                    amount: directAmt,
+                    details: 'Direct Scrap Amount'
+                };
+            }
+
+            const alWt = parseFloat(exAluminumWeight.value) || 0;
+            const alHCount = parseFloat(exAluminumHandles.value) || 0;
+            const stWt = parseFloat(exSteelWeight.value) || 0;
+            const stHCount = parseFloat(exSteelHandles.value) || 0;
+
+            const alNetWt = Math.max(0, alWt - (alHCount * 0.1));
+            const alCost = alNetWt * 150;
+
+            const stNetWt = Math.max(0, stWt - (stHCount * 0.1));
+            const stCost = stNetWt * 50;
+
+            if (exAluminumCost) exAluminumCost.textContent = formatCurrency(alCost) + (alHCount > 0 ? ` (-${(alHCount*0.1).toFixed(1)}kg)` : '');
+            if (exSteelCost) exSteelCost.textContent = formatCurrency(stCost) + (stHCount > 0 ? ` (-${(stHCount*0.1).toFixed(1)}kg)` : '');
+
+            let details = [];
+            if (alWt > 0) details.push(`Al: ${alWt}kg (${alHCount}h)`);
+            if (stWt > 0) details.push(`St: ${stWt}kg (${stHCount}h)`);
+
+            const totalEx = alCost + stCost;
+            if (liveTotalExchange) liveTotalExchange.textContent = formatCurrency(totalEx);
+
+            return {
+                amount: totalEx,
+                details: details.join(' | ') || 'Weight deduction'
+            };
+        }
+
+        function getCurrentExchangeTotal() {
+            const exObj = getCurrentExchangeValuesObj();
+            return exObj.amount;
+        }
+
+        function calculateExchangeValue() {
+            saveScrapStorage();
+            updateLivePreview();
+        }
+
+        function addItem() {
+            const mrp = parseFloat(currentMrpInput) || 0;
+            if (mrp <= 0) {
+                showToast("Enter an MRP greater than 0!");
+                return;
+            }
+
+            const saved = mrp * (currentDiscountPct / 100);
+            const final = Math.max(0, mrp - saved);
+
+            const newItem = {
+                id: Date.now(),
+                type: 'product',
+                mrp: mrp,
+                discountPct: currentDiscountPct,
+                saved: saved,
+                final: final,
+                active: true
+            };
+
+            billItems.push(newItem);
+            saveStorage();
+            
+            currentMrpInput = "0";
+            updateLivePreview();
+            updateBillSummary();
+            showToast(`Added MRP ₹${mrp} (${currentDiscountPct}%)`);
+        }
+
+        function toggleItemActive(id) {
+            const item = billItems.find(i => i.id === id);
+            if (item) {
+                item.active = item.active === false ? true : false;
                 saveStorage();
                 updateBillSummary();
-                showToast("Item removed.");
             }
-        );
-    }
+        }
 
-    function saveStorage() {
-        localStorage.setItem('github_store_items', JSON.stringify(billItems));
-    }
+        function confirmRemoveItem(id) {
+            openConfirmModal(
+                "Delete Item",
+                "Are you sure you want to remove this item from the bill?",
+                () => {
+                    billItems = billItems.filter(item => item.id !== id);
+                    saveStorage();
+                    updateBillSummary();
+                    showToast("Item removed.");
+                }
+            );
+        }
 
-    function updateBillSummary() {
-        let totalMrp = 0;
-        let totalSaved = 0;
-        let grandTotal = 0;
-        let activeProductCount = 0;
+        function saveStorage() {
+            localStorage.setItem('github_store_items', JSON.stringify(billItems));
+        }
 
-        billItems.forEach(item => {
-            if (!item.active) return;
-            if (item.type === 'product') {
-                totalMrp += item.mrp;
-                totalSaved += item.saved;
-                grandTotal += item.final;
-            }
-        });
+        function updateBillSummary() {
+            let totalMrp = 0;
+            let totalSaved = 0;
+            let grandTotal = 0;
+            let activeProductCount = 0;
 
-        const exchangeObj = getCurrentExchangeValuesObj();
-        const totalExchange = (exchangeObj.amount > 0 && savedScrapData.active !== false) ? exchangeObj.amount : 0;
+            billItems.forEach(item => {
+                if (!item.active) return;
+                if (item.type === 'product') {
+                    totalMrp += item.mrp;
+                    totalSaved += item.saved;
+                    grandTotal += item.final;
+                }
+            });
 
-        grandTotal -= totalExchange;
-        if (grandTotal < 0) grandTotal = 0;
+            const exchangeObj = getCurrentExchangeValuesObj();
+            const totalExchange = (exchangeObj.amount > 0 && savedScrapData.active !== false) ? exchangeObj.amount : 0;
 
-        billItems.forEach(item => {
-            if (item.type === 'product' && item.active !== false) {
-                activeProductCount++;
-            }
-        });
-        if (exchangeObj.amount > 0 && savedScrapData.active !== false) activeProductCount++;
+            grandTotal -= totalExchange;
+            if (grandTotal < 0) grandTotal = 0;
 
-        summaryCount.textContent = activeProductCount;
-        summaryTotalMrp.textContent = formatCurrency(totalMrp);
-        summarySaved.textContent = formatCurrency(totalSaved);
-        summaryGrandTotal.textContent = formatCurrency(grandTotal);
+            billItems.forEach(item => {
+                if (item.type === 'product' && item.active !== false) {
+                    activeProductCount++;
+                }
+            });
+            if (exchangeObj.amount > 0 && savedScrapData.active !== false) activeProductCount++;
 
-        if (exchangeObj.amount > 0) {
-            summaryExchangeContainer.classList.remove('hidden');
-            summaryExchangeContainer.classList.add('flex');
-            summaryTotalExchange.textContent = '-' + formatCurrency(exchangeObj.amount);
-            if (savedScrapData.active === false) {
-                summaryExchangeContainer.style.opacity = '0.4';
+            summaryCount.textContent = activeProductCount;
+            summaryTotalMrp.textContent = formatCurrency(totalMrp);
+            summarySaved.textContent = formatCurrency(totalSaved);
+            summaryGrandTotal.textContent = formatCurrency(grandTotal);
+
+            if (exchangeObj.amount > 0) {
+                summaryExchangeContainer.classList.remove('hidden');
+                summaryExchangeContainer.classList.add('flex');
+                summaryTotalExchange.textContent = '-' + formatCurrency(exchangeObj.amount);
+                if (savedScrapData.active === false) {
+                    summaryExchangeContainer.style.opacity = '0.4';
+                } else {
+                    summaryExchangeContainer.style.opacity = '1';
+                }
             } else {
-                summaryExchangeContainer.style.opacity = '1';
+                summaryExchangeContainer.classList.add('hidden');
+                summaryExchangeContainer.classList.remove('flex');
             }
-        } else {
-            summaryExchangeContainer.classList.add('hidden');
-            summaryExchangeContainer.classList.remove('flex');
+
+            modalGrandTotal.textContent = formatCurrency(grandTotal);
+            renderBillModalList();
         }
 
-        modalGrandTotal.textContent = formatCurrency(grandTotal);
-        renderBillModalList();
-    }
+        function renderBillModalList() {
+            const exchangeObj = getCurrentExchangeValuesObj();
+            const hasExchange = exchangeObj.amount > 0;
 
-    function renderBillModalList() {
-        const exchangeObj = getCurrentExchangeValuesObj();
-        const hasExchange = exchangeObj.amount > 0;
+            if (billItems.length === 0 && !hasExchange) {
+                billItemsList.innerHTML = `<div class="text-center text-zinc-500 py-12 text-sm font-medium">No items or scrap exchange added yet.</div>`;
+                return;
+            }
 
-        if (billItems.length === 0 && !hasExchange) {
-            billItemsList.innerHTML = `<div class="text-center text-zinc-500 py-12 text-sm font-medium">No items or scrap exchange added yet.</div>`;
-            return;
-        }
+            let html = "";
+            let displayIndex = 1;
 
-        let html = "";
-        let displayIndex = 1;
+            billItems.forEach((item) => {
+                const isActive = item.active !== false;
+                const opacityClass = isActive ? "" : "opacity-40 grayscale";
+                const eyeIconSvg = isActive 
+                    ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
+                    : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
 
-        billItems.forEach((item) => {
-            const isActive = item.active !== false;
-            const opacityClass = isActive ? "" : "opacity-40 grayscale";
-            const eyeIconSvg = isActive 
-                ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
-                : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
+                if (item.type === 'product') {
+                    html += `
+                        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-3.5 flex justify-between items-center shadow transition ${opacityClass}">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-300 font-mono text-xs flex items-center justify-center font-bold">
+                                    ${displayIndex++}
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm font-bold text-white font-mono-nums">₹${item.mrp.toLocaleString('en-IN')}</span>
+                                        <span class="text-[10px] bg-orange-500/20 text-orange-400 border border-orange-500/30 px-1.5 py-0.5 rounded font-mono font-bold">${item.discountPct}% OFF</span>
+                                    </div>
+                                    <div class="text-xs text-zinc-400 mt-0.5">
+                                        <span>Save: <strong class="text-emerald-400 font-mono-nums">₹${item.saved.toFixed(2)}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="text-right">
+                                    <div class="text-[10px] uppercase text-zinc-500 font-mono">Final</div>
+                                    <div class="text-base font-extrabold text-white font-mono-nums">₹${item.final.toFixed(2)}</div>
+                                </div>
+                                <button onclick="toggleItemActive(${item.id})" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isActive ? 'Disable item' : 'Enable item'}">
+                                    ${eyeIconSvg}
+                                </button>
+                                <button onclick="confirmRemoveItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
 
-            if (item.type === 'product') {
+            if (hasExchange) {
+                const isScrapActive = savedScrapData.active !== false;
+                const scrapOpacity = isScrapActive ? "" : "opacity-40 grayscale";
+                const scrapEyeIconSvg = isScrapActive 
+                    ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
+                    : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
+
                 html += `
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-3.5 flex justify-between items-center shadow transition ${opacityClass}">
+                    <div class="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-3.5 flex justify-between items-center shadow transition ${scrapOpacity}">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-300 font-mono text-xs flex items-center justify-center font-bold">
+                            <div class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 font-mono text-xs flex items-center justify-center font-bold">
                                 ${displayIndex++}
                             </div>
                             <div>
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm font-bold text-white font-mono-nums">₹${item.mrp.toLocaleString('en-IN')}</span>
-                                    <span class="text-[10px] bg-orange-500/20 text-orange-400 border border-orange-500/30 px-1.5 py-0.5 rounded font-mono font-bold">${item.discountPct}% OFF</span>
-                                </div>
-                                <div class="text-xs text-zinc-400 mt-0.5">
-                                    <span>Save: <strong class="text-emerald-400 font-mono-nums">₹${item.saved.toFixed(2)}</strong></span>
-                                </div>
+                                <div class="text-sm font-bold text-orange-400">Scrap Exchange Deduction</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5 font-mono">${exchangeObj.details || 'Weight deduction'}</div>
                             </div>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="text-right">
-                                <div class="text-[10px] uppercase text-zinc-500 font-mono">Final</div>
-                                <div class="text-base font-extrabold text-white font-mono-nums">₹${item.final.toFixed(2)}</div>
+                                <div class="text-[10px] uppercase text-orange-400/80 font-mono">Deduction</div>
+                                <div class="text-base font-extrabold text-orange-400 font-mono-nums">-₹${exchangeObj.amount.toFixed(2)}</div>
                             </div>
-                            <button onclick="toggleItemActive(${item.id})" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isActive ? 'Disable item' : 'Enable item'}">
-                                ${eyeIconSvg}
+                            <button onclick="toggleScrapActive()" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isScrapActive ? 'Disable scrap deduction' : 'Enable scrap deduction'}">
+                                ${scrapEyeIconSvg}
                             </button>
-                            <button onclick="confirmRemoveItem(${item.id})" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete">
+                            <button onclick="confirmDeleteScrap()" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete Scrap">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         </div>
                     </div>
                 `;
             }
-        });
 
-        if (hasExchange) {
-            const isScrapActive = savedScrapData.active !== false;
-            const scrapOpacity = isScrapActive ? "" : "opacity-40 grayscale";
-            const scrapEyeIconSvg = isScrapActive 
-                ? `<svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`
-                : `<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.03 10.03 0 014.228-5.32m3.155-1.396A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>`;
-
-            html += `
-                <div class="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-3.5 flex justify-between items-center shadow transition ${scrapOpacity}">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 font-mono text-xs flex items-center justify-center font-bold">
-                            ${displayIndex++}
-                        </div>
-                        <div>
-                            <div class="text-sm font-bold text-orange-400">Scrap Exchange Deduction</div>
-                            <div class="text-[10px] text-zinc-400 mt-0.5 font-mono">${exchangeObj.details || 'Weight deduction'}</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="text-right">
-                            <div class="text-[10px] uppercase text-orange-400/80 font-mono">Deduction</div>
-                            <div class="text-base font-extrabold text-orange-400 font-mono-nums">-₹${exchangeObj.amount.toFixed(2)}</div>
-                        </div>
-                        <button onclick="toggleScrapActive()" class="text-zinc-400 hover:text-orange-400 p-1.5 transition" title="${isScrapActive ? 'Disable scrap deduction' : 'Enable scrap deduction'}">
-                            ${scrapEyeIconSvg}
-                        </button>
-                        <button onclick="confirmDeleteScrap()" class="text-zinc-500 hover:text-rose-400 p-1.5 transition" title="Delete Scrap">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
-                    </div>
-                </div>
-            `;
+            billItemsList.innerHTML = html;
         }
 
-        billItemsList.innerHTML = html;
-    }
-
-    function formatCurrency(amount) {
-        return '₹' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function downloadPDF() {
-        const activeItems = billItems.filter(item => item.active !== false && item.type === 'product');
-        const exchangeObj = getCurrentExchangeValuesObj();
-        const totalExchange = (exchangeObj.amount > 0 && savedScrapData.active !== false) ? exchangeObj.amount : 0;
-
-        if (activeItems.length === 0 && totalExchange <= 0) {
-            showToast("No active items to export!");
-            return;
+        function formatCurrency(amount) {
+            return '₹' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        const { jsPDF } = window.jspdf;
-        
-        let totalMrp = 0, totalSaved = 0, grandTotal = 0;
-        activeItems.forEach(item => {
-            totalMrp += item.mrp;
-            totalSaved += item.saved;
-            grandTotal += item.final;
-        });
-        grandTotal -= totalExchange;
-        if (grandTotal < 0) grandTotal = 0;
+        function downloadPDF() {
+            const activeItems = billItems.filter(item => item.active !== false && item.type === 'product');
+            const exchangeObj = getCurrentExchangeValuesObj();
+            const totalExchange = (exchangeObj.amount > 0 && savedScrapData.active !== false) ? exchangeObj.amount : 0;
 
-        let itemCount = activeItems.length + (totalExchange > 0 ? 1 : 0);
-        let docHeight = 130 + (itemCount * 28);
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: [80, docHeight]
-        });
+            if (activeItems.length === 0 && totalExchange <= 0) {
+                showToast("No active items to export!");
+                return;
+            }
 
-        doc.setFont("Courier", "bold");
-        doc.setFontSize(11);
-
-        let y = 12;
-        const pageWidth = 80;
-        const margin = 5;
-
-        doc.text("STORE DISCOUNT INVOICE", pageWidth / 2, y, { align: 'center' });
-        y += 5;
-        doc.setFontSize(8);
-        doc.setFont("Courier", "normal");
-        doc.text("========================================", pageWidth / 2, y, { align: 'center' });
-        y += 4;
-        doc.text(`Date : ${new Date().toLocaleDateString('en-IN')}`, margin, y);
-        doc.text(`Time : ${new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'})}`, pageWidth - margin, y, { align: 'right' });
-        y += 4;
-        doc.text("========================================", pageWidth / 2, y, { align: 'center' });
-        y += 6;
-
-        let printIndex = 1;
-        activeItems.forEach((item) => {
-            doc.setFont("Courier", "bold");
-            doc.text(`${printIndex++}. MRP: ₹${item.mrp.toFixed(2)}`, margin, y);
-            doc.text(`[${item.discountPct}% OFF]`, pageWidth - margin, y, { align: 'right' });
-            y += 4;
-            doc.setFont("Courier", "normal");
-            doc.text(`   Discount Savings : ₹${item.saved.toFixed(2)}`, margin, y);
-            y += 4;
-            doc.text(`   Final Item Price : ₹${item.final.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
-            y += 5;
-            doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
-            y += 5;
-        });
-
-        if (totalExchange > 0) {
-            doc.setFont("Courier", "bold");
-            doc.text(`${printIndex++}. Scrap Exchange Credit`, margin, y);
-            y += 4;
-            doc.setFont("Courier", "normal");
-            doc.text(`   Details: ${exchangeObj.details || 'Weight deduction'}`, margin, y);
-            y += 4;
-            doc.text(`   Credit Deduction: -₹${totalExchange.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
-            y += 5;
-            doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
-            y += 5;
-        }
-
-        y += 2;
-        doc.setFont("Courier", "bold");
-        doc.text(`TOTAL MRP         : ₹${totalMrp.toFixed(2)}`, margin, y);
-        y += 4;
-        doc.text(`TOTAL SAVED       : ₹${totalSaved.toFixed(2)}`, margin, y);
-        y += 4;
-        if (totalExchange > 0) {
-            doc.text(`SCRAP CREDIT      : -₹${totalExchange.toFixed(2)}`, margin, y);
-            y += 4;
-        }
-        doc.text("========================================", pageWidth / 2, y, { align: 'center' });
-        y += 5;
-        doc.setFontSize(10);
-        doc.text(`GRAND PAYABLE     : ₹${grandTotal.toFixed(2)}`, margin, y);
-        y += 6;
-        doc.setFontSize(8);
-        doc.setFont("Courier", "normal");
-        doc.text("========================================", pageWidth / 2, y, { align: 'center' });
-        y += 6;
-        doc.text("Thank You for Shopping with Us!", pageWidth / 2, y, { align: 'center' });
-        y += 4;
-        doc.text("Please retain receipt for exchanges.", pageWidth / 2, y, { align: 'center' });
-
-        doc.save(`Corporate_Receipt_${new Date().toISOString().slice(0,10)}.pdf`);
-        showToast("Corporate thermal PDF downloaded!");
-    }
-
-    function openConfirmModal(title, desc, onConfirmCallback) {
-        confirmTitle.textContent = title;
-        confirmDesc.textContent = desc;
-        confirmYesBtn.onclick = function() {
-            closeConfirmModal();
-            onConfirmCallback();
-        };
-        confirmModal.classList.remove('hidden');
-    }
-
-    function closeConfirmModal() {
-        confirmModal.classList.add('hidden');
-    }
-
-    function toggleBillModal() {
-        billModal.classList.toggle('hidden');
-    }
-
-    function toggleSettingsModal() {
-        settingsModal.classList.toggle('hidden');
-    }
-
-    function shareApp() {
-        const shareData = {
-            title: 'Store Discount Calculator',
-            text: 'Check out this awesome Store Discount Calculator app!',
-            url: window.location.href
-        };
-
-        if (navigator.share) {
-            navigator.share(shareData).catch(() => {
-                copyToClipboard(window.location.href);
+            const { jsPDF } = window.jspdf;
+            
+            let totalMrp = 0, totalSaved = 0, grandTotal = 0;
+            activeItems.forEach(item => {
+                totalMrp += item.mrp;
+                totalSaved += item.saved;
+                grandTotal += item.final;
             });
-        } else {
-            copyToClipboard(window.location.href);
-        }
-    }
+            grandTotal -= totalExchange;
+            if (grandTotal < 0) grandTotal = 0;
 
-    function copyToClipboard(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";  
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                showToast("App link copied to clipboard!");
+            let itemCount = activeItems.length + (totalExchange > 0 ? 1 : 0);
+            let docHeight = 130 + (itemCount * 28);
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [80, docHeight]
+            });
+
+            doc.setFont("Courier", "bold");
+            doc.setFontSize(11);
+
+            let y = 12;
+            const pageWidth = 80;
+            const margin = 5;
+
+            const headerTitle = (customStoreName || "STORE DISCOUNT INVOICE").toUpperCase();
+            doc.text(headerTitle, pageWidth / 2, y, { align: 'center' });
+            y += 5;
+            doc.setFontSize(8);
+            doc.setFont("Courier", "normal");
+            doc.text("========================================", pageWidth / 2, y, { align: 'center' });
+            y += 4;
+            doc.text(`Date : ${new Date().toLocaleDateString('en-IN')}`, margin, y);
+            doc.text(`Time : ${new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit'})}`, pageWidth - margin, y, { align: 'right' });
+            y += 4;
+            doc.text("========================================", pageWidth / 2, y, { align: 'center' });
+            y += 6;
+
+            let printIndex = 1;
+            activeItems.forEach((item) => {
+                doc.setFont("Courier", "bold");
+                doc.text(`${printIndex++}. MRP: ₹${item.mrp.toFixed(2)}`, margin, y);
+                doc.text(`[${item.discountPct}% OFF]`, pageWidth - margin, y, { align: 'right' });
+                y += 4;
+                doc.setFont("Courier", "normal");
+                doc.text(`   Discount Savings : ₹${item.saved.toFixed(2)}`, margin, y);
+                y += 4;
+                doc.text(`   Final Item Price : ₹${item.final.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
+                y += 5;
+                doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
+                y += 5;
+            });
+
+            if (totalExchange > 0) {
+                doc.setFont("Courier", "bold");
+                doc.text(`${printIndex++}. Scrap Exchange Credit`, margin, y);
+                y += 4;
+                doc.setFont("Courier", "normal");
+                doc.text(`   Details: ${exchangeObj.details || 'Weight deduction'}`, margin, y);
+                y += 4;
+                doc.text(`   Credit Deduction: -₹${totalExchange.toFixed(2)}`, pageWidth - margin, y, { align: 'right' });
+                y += 5;
+                doc.text("----------------------------------------", pageWidth / 2, y, { align: 'center' });
+                y += 5;
+            }
+
+            y += 2;
+            doc.setFont("Courier", "bold");
+            doc.text(`TOTAL MRP         : ₹${totalMrp.toFixed(2)}`, margin, y);
+            y += 4;
+            doc.text(`TOTAL SAVED       : ₹${totalSaved.toFixed(2)}`, margin, y);
+            y += 4;
+            if (totalExchange > 0) {
+                doc.text(`SCRAP CREDIT      : -₹${totalExchange.toFixed(2)}`, margin, y);
+                y += 4;
+            }
+            doc.text("========================================", pageWidth / 2, y, { align: 'center' });
+            y += 5;
+            doc.setFontSize(10);
+            doc.text(`GRAND PAYABLE     : ₹${grandTotal.toFixed(2)}`, margin, y);
+            y += 6;
+            doc.setFontSize(8);
+            doc.setFont("Courier", "normal");
+            doc.text("========================================", pageWidth / 2, y, { align: 'center' });
+            y += 6;
+            doc.text("Thank You for Shopping with Us!", pageWidth / 2, y, { align: 'center' });
+            y += 4;
+            doc.text("Please retain receipt for exchanges.", pageWidth / 2, y, { align: 'center' });
+
+            doc.save(`Invoice_${customStoreName.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`);
+            showToast("Thermal PDF receipt downloaded!");
+        }
+
+        function openConfirmModal(title, desc, onConfirmCallback) {
+            confirmTitle.textContent = title;
+            confirmDesc.textContent = desc;
+            confirmYesBtn.onclick = function() {
+                closeConfirmModal();
+                onConfirmCallback();
+            };
+            confirmModal.classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            confirmModal.classList.add('hidden');
+        }
+
+        function toggleBillModal() {
+            billModal.classList.toggle('hidden');
+        }
+
+        function toggleSettingsModal() {
+            settingsModal.classList.toggle('hidden');
+        }
+
+        function shareApp() {
+            const shareData = {
+                title: customStoreName,
+                text: `Check out ${customStoreName} app!`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {
+                    copyToClipboard(window.location.href);
+                });
             } else {
+                copyToClipboard(window.location.href);
+            }
+        }
+
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast("App link copied to clipboard!");
+                } else {
+                    showToast("Failed to copy link.");
+                }
+            } catch (err) {
                 showToast("Failed to copy link.");
             }
-        } catch (err) {
-            showToast("Failed to copy link.");
+            document.body.removeChild(textArea);
         }
-        document.body.removeChild(textArea);
-    }
 
-    function showToast(message) {
-        toastMsg.textContent = message;
-        toast.classList.remove('translate-y-16', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
-        setTimeout(() => {
-            toast.classList.remove('translate-y-0', 'opacity-100');
-            toast.classList.add('translate-y-16', 'opacity-0');
-        }, 2000);
-    }
-</script>
+        function showToast(message) {
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-16', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-16', 'opacity-0');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
